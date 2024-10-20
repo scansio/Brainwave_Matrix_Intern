@@ -1,6 +1,11 @@
 {
   "name": "landing_page",
   "version": "0.1.0",
+  "homepage": "https://scansio.github.io/Brainwave_Matrix_Intern/landing_page/build",
+  "author": {
+    "name": "Emmanuel Elom",
+    "email": "scansioquielom@gmail.com"
+  },
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",

@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "/static/css/main.9a71fbc5.css",
-    "main.js": "/static/js/main.b628ab5f.js",
-    "static/js/453.3186a550.chunk.js": "/static/js/453.3186a550.chunk.js",
-    "index.html": "/index.html"
+    "main.css": "/Brainwave_Matrix_Intern/landing_page/build/static/css/main.9a71fbc5.css",
+    "main.js": "/Brainwave_Matrix_Intern/landing_page/build/static/js/main.c6b17f2b.js",
+    "static/js/453.3186a550.chunk.js": "/Brainwave_Matrix_Intern/landing_page/build/static/js/453.3186a550.chunk.js",
+    "index.html": "/Brainwave_Matrix_Intern/landing_page/build/index.html"
   },
   "entrypoints": [
     "static/css/main.9a71fbc5.css",
-    "static/js/main.b628ab5f.js"
+    "static/js/main.c6b17f2b.js"
   ]
 }
