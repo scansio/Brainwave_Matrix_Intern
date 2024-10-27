@@ -1,0 +1,16 @@
+{
+  "name": "brainwave_matrix_intern",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scansio/Brainwave_Matrix_Intern.git"
+  },
+  "author": "Emmanuel Paul Elom <scansioquielom@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scansio/Brainwave_Matrix_Intern/issues"
+  },
+  "homepage": "https://github.com/scansio/Brainwave_Matrix_Intern#readme"
+}
