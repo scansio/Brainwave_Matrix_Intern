@@ -1,20 +1,20 @@
-import { getObject } from '../../../../common'
-import { AuthenticationLevel } from '../../../../configs/constants'
-import Article from '../../../../controllers/blog/Article'
-import { ArticleSchema } from '../../../../models/blog/ArticleModel'
-import { IControllerRoute } from '../../../interfaces/IControllerRoute'
-import { RequestMethods } from '../../../RequestMethods'
+import { getObject } from '../../../common'
+import { AuthenticationLevel } from '../../../configs/constants'
+import Comment from '../../../controllers/blog/Comment'
+import { CommentSchema } from '../../../models/blog/CommentModel'
+import { IControllerRoute } from '../../interfaces/IControllerRoute'
+import { RequestMethods } from '../../RequestMethods'
 
-const ArticleRoutes: IControllerRoute = {
-  tag: 'Article',
-  controller: Article,
+const CommentRoutes: IControllerRoute = {
+  tag: 'Comment',
+  controller: Comment,
   baseUrl: '/article',
   routes: [
     {
       path: '/article/all',
       validation: { query: { q: {} } },
 
-      controllerMemberFunctionIdentifier: Article.prototype.all,
+      controllerMemberFunctionIdentifier: Comment.prototype.all,
       method: RequestMethods.GET,
       metadata: {
         summary: 'Get all articles',
@@ -68,8 +68,8 @@ const ArticleRoutes: IControllerRoute = {
       requireAuthentication: AuthenticationLevel.ADMIN,
     },
   ],
-  schema: getObject(ArticleSchema),
+  schema: getObject(CommentSchema),
   description: 'Operation on article',
 }
 
-export default ArticleRoutes
+export default CommentRoutes

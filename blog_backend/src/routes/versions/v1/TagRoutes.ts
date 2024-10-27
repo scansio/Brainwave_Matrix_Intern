@@ -1,9 +1,9 @@
-import { getObject } from '../../../../common'
-import { AuthenticationLevel } from '../../../../configs/constants'
-import Tag from '../../../../controllers/blog/Tag'
-import { TagSchema } from '../../../../models/blog/TagModel'
-import { IControllerRoute } from '../../../interfaces/IControllerRoute'
-import { RequestMethods } from '../../../RequestMethods'
+import { getObject } from '../../../common'
+import { AuthenticationLevel } from '../../../configs/constants'
+import Tag from '../../../controllers/blog/Tag'
+import { TagSchema } from '../../../models/blog/TagModel'
+import { IControllerRoute } from '../../interfaces/IControllerRoute'
+import { RequestMethods } from '../../RequestMethods'
 
 const TagRoutes: IControllerRoute = {
   tag: 'Tag',

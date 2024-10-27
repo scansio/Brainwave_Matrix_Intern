@@ -1,9 +1,9 @@
-import { getObject } from '../../../../common'
-import { AuthenticationLevel } from '../../../../configs/constants'
-import Reply from '../../../../controllers/blog/Reply'
-import { ReplySchema } from '../../../../models/blog/ReplyModel'
-import { IControllerRoute } from '../../../interfaces/IControllerRoute'
-import { RequestMethods } from '../../../RequestMethods'
+import { getObject } from '../../../common'
+import { AuthenticationLevel } from '../../../configs/constants'
+import Reply from '../../../controllers/blog/Reply'
+import { ReplySchema } from '../../../models/blog/ReplyModel'
+import { IControllerRoute } from '../../interfaces/IControllerRoute'
+import { RequestMethods } from '../../RequestMethods'
 
 const ReplyRoutes: IControllerRoute = {
   tag: 'Reply',

@@ -1,9 +1,9 @@
-import { getObject } from '../../../../common'
-import { AuthenticationLevel } from '../../../../configs/constants'
-import Newsletter from '../../../../controllers/blog/Newsletter'
-import { NewsletterSchema } from '../../../../models/blog/NewsletterModel'
-import { IControllerRoute } from '../../../interfaces/IControllerRoute'
-import { RequestMethods } from '../../../RequestMethods'
+import { getObject } from '../../../common'
+import { AuthenticationLevel } from '../../../configs/constants'
+import Newsletter from '../../../controllers/blog/Newsletter'
+import { NewsletterSchema } from '../../../models/blog/NewsletterModel'
+import { IControllerRoute } from '../../interfaces/IControllerRoute'
+import { RequestMethods } from '../../RequestMethods'
 
 const NewsletterRoutes: IControllerRoute = {
   tag: 'Newsletter',
