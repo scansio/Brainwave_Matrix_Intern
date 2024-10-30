@@ -86,11 +86,6 @@ export enum AuthenticationLevel {
   DEVELOPER = 'DEVELOPER',
 }
 
-export enum UserType {
-  READER = 'READER',
-  AUTHOR = 'AUTHOR',
-}
-
 export enum TransactionType {
   WITHDRAW = 'WITHDRAW',
   DEPOSIT = 'DEPOSIT',

@@ -7,7 +7,7 @@ export const ReplySchema: Schema<IReply> = new Schema<IReply>({
   commentId: {
     type: Schema.Types.ObjectId,
     ref: CommentModel.modelName,
-    default: [],
+    required: [true, 'Comment ID is required'],
   },
   content: {
     type: String,

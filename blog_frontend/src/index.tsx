@@ -2,6 +2,8 @@ import Reblend from "reblendjs";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import "bootstrap/dist/js/bootstrap.min.js";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 Reblend.mountOn("root", App);
 // If you want to start measuring performance in your app, pass a function

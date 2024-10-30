@@ -1,4 +1,4 @@
-import { AuthenticationLevel, UserType } from '../configs/constants'
+import { AuthenticationLevel } from '../configs/constants'
 import ITimestamp from './ITimestamp'
 
 interface IUser extends ITimestamp {
@@ -8,7 +8,6 @@ interface IUser extends ITimestamp {
   email: string
   password?: string
   role: AuthenticationLevel
-  type: UserType
   dob: Date
   refID: number
   pin?: string

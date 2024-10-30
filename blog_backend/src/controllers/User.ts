@@ -150,7 +150,7 @@ class User extends BaseController {
     else this.status(true).statusCode(GET_SUCCESS).data('userProfiles', userProfiles).send()
   }
 
-  async create({ firstname, lastname, email, password, refID }: any) {
+  async create({ firstname, lastname, email, phone, password, refID }: any) {
     if (refID) {
       const referredBy = await UserModel.findOne({ _id: refID }).exec()
       if (!referredBy) {
@@ -176,6 +176,7 @@ class User extends BaseController {
         lastname,
         email,
         password,
+        phone,
         refID,
       })
     }
@@ -215,48 +216,24 @@ class User extends BaseController {
     let avatar
     let filestore
     if (this.req.headers['content-type']?.includes('multipart')) {
-      filestore = new FileStore(this)
+      filestore = new FileStore(this, true)
       avatar = (await filestore.uploadFor('avatar')) || null
     }
     const {
-      refID,
-      yesterdayNumberOfTrade,
-      yesterdayProfit,
-      yesterdayTradePercentage,
-      todayNumberOfTrade,
-      todayProfit,
-      todayTradePercentage,
-      currentMonthProfit,
-      currentMonthNumberOfTrade,
-      currentMonthTradePercentage,
-      lastMonthProfit,
-      lastMonthNumberOfTrade,
-      lastMonthTradePercentage,
-      energy,
-    } = this.req.body
-    const adminUpdate = (await this.adminAccess(false))
-      ? {
-          refID,
-          yesterdayNumberOfTrade,
-          yesterdayProfit,
-          yesterdayTradePercentage,
-          todayNumberOfTrade,
-          todayProfit,
-          todayTradePercentage,
-          currentMonthProfit,
-          currentMonthNumberOfTrade,
-          currentMonthTradePercentage,
-          lastMonthProfit,
-          lastMonthNumberOfTrade,
-          lastMonthTradePercentage,
-          energy,
-        }
-      : {}
-    const { uid, firstname, lastname, email, role, bio, country, state, phone, status }: any = this.req.body
+      uid = this.user._id,
+      firstname,
+      lastname,
+      email,
+      role,
+      bio,
+      country,
+      state,
+      phone,
+      status,
+    }: any = this.req.body
     await this.isValidUser(uid)
     await this.ownerAndAdminAccess(uid)
     const definedValues = getDefinedValuesFrom({
-      ...adminUpdate,
       firstname,
       lastname,
       email,

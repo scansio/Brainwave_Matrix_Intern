@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 import { APIVersionStatus } from '../../APIVersionStatus'
 import IAPIVersionInfo from '../../interfaces/IAPIVersionInfo'
-import { AuthenticationLevel, UserType } from '../../../configs/constants'
+import { AuthenticationLevel } from '../../../configs/constants'
 config()
 
 const info: IAPIVersionInfo = {
@@ -12,7 +12,6 @@ const info: IAPIVersionInfo = {
   status: APIVersionStatus.ENABLED,
   miscModel: {
     AuthenticationLevel,
-    UserType,
   },
 }
 

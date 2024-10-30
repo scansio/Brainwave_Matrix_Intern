@@ -3,6 +3,7 @@ import Router, { Route } from "reblend-router";
 import Notfound from "./pages/Notfound";
 import ErrorHandler from "./layouts/ErrorHandler";
 import { routes } from "./routes";
+import { ToastContainer } from "react-toast";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           path={path}
         />
       ))}
+      <ToastContainer />
     </>
   );
 }

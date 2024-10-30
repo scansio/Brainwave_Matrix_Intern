@@ -22,6 +22,7 @@ export const UserProfileSchema = new mongoose.Schema<IUserProfile>({
   avatar: {
     type: String,
   },
+  slug: String,
 })
 
 const UserProfileModel = mongoose.model<IUserProfile>('UserProfile', TimestampsPlugin(UserProfileSchema))

@@ -2,7 +2,6 @@ import mongoose, { Schema } from 'mongoose'
 import TimestampsPlugin from '../plugins/TimestampsPlugin'
 import IComment from '../../types/blog/IComment'
 import ArticleModel from './ArticleModel'
-import ReplyModel from './ReplyModel'
 
 export const CommentSchema: Schema<IComment> = new Schema<IComment>({
   articleId: {
@@ -12,7 +11,7 @@ export const CommentSchema: Schema<IComment> = new Schema<IComment>({
   },
   replyIds: {
     type: [Schema.Types.ObjectId],
-    ref: ReplyModel.modelName,
+    ref: 'Reply',
   },
   content: {
     type: String,

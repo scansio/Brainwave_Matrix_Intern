@@ -18,11 +18,7 @@ import IServerConfig from './types/IServerConfig'
       name: 'RepoHookServer',
       module: resolve(__dirname, './server/RepoHookServer'),
     },
-    { name: 'CdnServer', module: resolve(__dirname, './server/CdnServer') },
-    {
-      name: 'SocketServer',
-      module: resolve(__dirname, './server/SocketServer'),
-    },
+    { name: 'CdnServer', module: resolve(__dirname, './server/CdnServer') }
   ]
 
   await createIndexHtmlRecursively(resolve(__dirname, '..'))

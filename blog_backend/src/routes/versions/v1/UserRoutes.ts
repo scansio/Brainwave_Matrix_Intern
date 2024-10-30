@@ -202,9 +202,7 @@ const UserRoutes: IControllerRoute = {
       path: '/user/:refID?',
       validation: {
         param: {
-          refID: {
-            isLength: { min: 10 },
-          },
+          refID: {},
         },
       },
       method: RequestMethods.POST,

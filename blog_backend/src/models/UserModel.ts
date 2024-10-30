@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import IUser from '../types/IUser'
-import { AuthenticationLevel, INACTIVE, UserType } from '../configs/constants'
+import { AuthenticationLevel, INACTIVE } from '../configs/constants'
 import md5 from '../libs/md5'
 import TimestampsPlugin from './plugins/TimestampsPlugin'
 
@@ -43,7 +43,7 @@ export const UserSchema = new Schema<IUser>({
   password: {
     type: String,
     trim: true,
-    //required: [true, "Password is required"],
+    required: [true, "Password is required"],
     set: (password: string) => password && md5(`${password}`),
   },
   pin: {
@@ -56,36 +56,13 @@ export const UserSchema = new Schema<IUser>({
   },
 
   oauth: Boolean,
-
-  yesterdayNumberOfTrade: Number,
-  yesterdayProfit: Number,
-  yesterdayTradePercentage: Number,
-
-  todayNumberOfTrade: Number,
-  todayProfit: Number,
-  todayTradePercentage: Number,
-
-  currentMonthProfit: Number,
-  currentMonthNumberOfTrade: Number,
-  currentMonthTradePercentage: Number,
-
-  lastMonthProfit: Number,
-  lastMonthNumberOfTrade: Number,
-  lastMonthTradePercentage: Number,
-
-  energy: Number,
   role: {
     type: String,
     enum: AuthenticationLevel,
     default: AuthenticationLevel.END_USER,
   },
-  type: {
-    type: String,
-    enum: UserType,
-    default: UserType.PASSENGER,
-  },
   dob: Date,
-  phone: { type: Number, minLength: 7, maxLength: 10, required: true },
+  phone: { type: Number, minLength: 7, maxLength: 10/* , required: true */ },
 })
 
 const UserModel = mongoose.model<IUser>('User', TimestampsPlugin(UserSchema))

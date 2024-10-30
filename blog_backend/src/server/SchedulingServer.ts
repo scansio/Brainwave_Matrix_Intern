@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import Logger from '../miscs/Logger'
 import CronDefinition from '../cronjobs/config/CronDefinition'
 import createSecureServer, { onClose } from './createSecureServer'
-import { validatePaystackHook } from '../libs/Paystack'
+
 ;(async () => {
   const app = express()
   dotenv.config()
@@ -19,9 +19,6 @@ import { validatePaystackHook } from '../libs/Paystack'
     scheme: SCHEDULING_SERVER_SCHEME,
     port: SCHEDULING_SERVER_PORT as string,
   })
-
-  //Paystack hook event
-  router.get('/paystack', validatePaystackHook)
 
   const dbConnectionString: string = (
     process.env.ENVIRONMENT === 'production' ? process.env.MONGO_URI_PASS : process.env.MONGO_URI_PASS_LOCAL

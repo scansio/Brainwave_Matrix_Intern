@@ -10,7 +10,7 @@ class FileStore {
   private storage
   private upload
   private controller: BaseController
-  private publicDir = `../../file_store/public`
+  private publicDir = `../../cdn/file_store/public`
   private privateDir = `../../file_store/private/user`
   private activeDir
 
