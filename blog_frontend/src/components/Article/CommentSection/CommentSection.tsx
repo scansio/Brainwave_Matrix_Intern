@@ -12,6 +12,7 @@ import {
   CREATE_COMMENT,
 } from "../../../scripts/config/RestEndpoints";
 import { ACTIVE, UID } from "../../../scripts/config/contants";
+import { Modal } from "react-bootstrap";
 
 function CommentSection({ articleId }: { articleId: string }) {
   const uid = SharedConfig.getLocalData(UID);
@@ -21,6 +22,8 @@ function CommentSection({ articleId }: { articleId: string }) {
   const [loading, setLoading] = useState(true);
   const [loadingNextComments, setLoadingNextComments] = useState(false);
   const [reply, setReply] = useState(false);
+  let replyingComment = null
+
 
   useEffect(() => {
     if (articleId) {
@@ -126,8 +129,118 @@ function CommentSection({ articleId }: { articleId: string }) {
       </div>
       <div class="max-w-screen-md mx-auto">
         <ul class="nc-SingleCommentLists space-y-5">
-          <div class="nc-CommentCard flex ">
-            {/* <div
+          {comments?.map((comment) => {
+            return (
+              <div>
+                <Modal show={reply} onHide={() => {setReply(false); replyingComment = null}}>
+                <div class="flex-grow flex flex-col p-4 ml-2 text-sm border border-neutral-200 rounded-xl sm:ml-3 sm:text-base dark:border-neutral-700">
+                    <div class="relative flex items-center pr-6">
+                      <div class="absolute -right-3 -top-3">
+                        <div
+                          class="relative inline-block text-left"
+                          data-headlessui-state=""
+                        >
+                          <button
+                            class="p-2 text-neutral-500 flex items-center justify-center rounded-lg hover:text-neutral-800 dark:hover:text-neutral-200 sm:hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none"
+                            title="More"
+                            id="headlessui-menu-button-:r26:"
+                            type="button"
+                            aria-haspopup="menu"
+                            aria-expanded="false"
+                            data-headlessui-state=""
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              aria-hidden="true"
+                              data-slot="icon"
+                              class="h-6 w-6"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M4.5 12a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+                                clip-rule="evenodd"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <a
+                        class="flex-shrink-0 font-semibold text-neutral-800 dark:text-neutral-100"
+                        href={"/publisher/" + comment.uid.slug}
+                      >
+                        {comment.uid.firstname} {comment.uid.lastname}
+                      </a>
+                      <span class="mx-2">·</span>
+                      <span class="text-neutral-500 dark:text-neutral-400 text-xs line-clamp-1 sm:text-sm">
+                        {comment?.createdAt?.dateString}
+                      </span>
+                    </div>
+                    <span class="block text-neutral-700 mt-2 mb-3 sm:mt-3 sm:mb-4 dark:text-neutral-300">
+                      {comment.content}
+                    </span>
+                    <div
+                      class="nc-CommentCardLikeReply flex items-center space-x-2 "
+                      data-nc-id="CommentCardLikeReply"
+                    >
+                      <button
+                        class="min-w-[68px] flex items-center rounded-full leading-none px-3 h-8 text-xs focus:outline-none text-neutral-700 bg-neutral-100 dark:text-neutral-200 dark:bg-neutral-800 hover:bg-rose-50 hover:text-rose-600 dark:hover:text-rose-500"
+                        title="Liked"
+                      >
+                        <svg
+                          class="h-5 w-5 mr-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M11.995 7.23319C10.5455 5.60999 8.12832 5.17335 6.31215 6.65972C4.49599 8.14609 4.2403 10.6312 5.66654 12.3892L11.995 18.25L18.3235 12.3892C19.7498 10.6312 19.5253 8.13046 17.6779 6.65972C15.8305 5.18899 13.4446 5.60999 11.995 7.23319Z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                        <span class="text-neutral-900 dark:text-neutral-200">
+                          {comment.like}
+                        </span>
+                      </button>
+                      <button
+                        class="flex items-center min-w-[68px] rounded-full text-neutral-6000 bg-neutral-100 dark:text-neutral-200 dark:bg-neutral-800 px-3 h-8 hover:bg-teal-50 hover:text-teal-600 dark:hover:text-teal-500 focus:outline-none "
+                        title="Reply"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-[18px] w-[18px] mr-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                          ></path>
+                        </svg>
+                        <span
+                          class="text-xs leading-none text-neutral-900 dark:text-neutral-200"
+                          onclick={(e:any) => {
+                            e.preventDefault();
+                            setReply(true);
+                            replyingComment = comment
+                          }}
+                        >
+                          Reply
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </Modal>
+                <div class="nc-CommentCard flex ">
+                  {/* <div
               class="wil-avatar relative flex-shrink-0 inline-flex items-center justify-center overflow-hidden text-neutral-100 uppercase font-semibold shadow-inner rounded-full h-6 w-6 text-base sm:text-lg sm:h-8 sm:w-8 mt-4"
               style=""
             >
@@ -139,103 +252,118 @@ function CommentSection({ articleId }: { articleId: string }) {
               />
               <span class="wil-avatar__name">J</span>
             </div> */}
-            <div class="flex-grow flex flex-col p-4 ml-2 text-sm border border-neutral-200 rounded-xl sm:ml-3 sm:text-base dark:border-neutral-700">
-              <div class="relative flex items-center pr-6">
-                <div class="absolute -right-3 -top-3">
-                  <div
-                    class="relative inline-block text-left"
-                    data-headlessui-state=""
-                  >
-                    <button
-                      class="p-2 text-neutral-500 flex items-center justify-center rounded-lg hover:text-neutral-800 dark:hover:text-neutral-200 sm:hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none"
-                      title="More"
-                      id="headlessui-menu-button-:r26:"
-                      type="button"
-                      aria-haspopup="menu"
-                      aria-expanded="false"
-                      data-headlessui-state=""
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        data-slot="icon"
-                        class="h-6 w-6"
+                  <div class="flex-grow flex flex-col p-4 ml-2 text-sm border border-neutral-200 rounded-xl sm:ml-3 sm:text-base dark:border-neutral-700">
+                    <div class="relative flex items-center pr-6">
+                      <div class="absolute -right-3 -top-3">
+                        <div
+                          class="relative inline-block text-left"
+                          data-headlessui-state=""
+                        >
+                          <button
+                            class="p-2 text-neutral-500 flex items-center justify-center rounded-lg hover:text-neutral-800 dark:hover:text-neutral-200 sm:hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none"
+                            title="More"
+                            id="headlessui-menu-button-:r26:"
+                            type="button"
+                            aria-haspopup="menu"
+                            aria-expanded="false"
+                            data-headlessui-state=""
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              aria-hidden="true"
+                              data-slot="icon"
+                              class="h-6 w-6"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M4.5 12a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+                                clip-rule="evenodd"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <a
+                        class="flex-shrink-0 font-semibold text-neutral-800 dark:text-neutral-100"
+                        href={"/publisher/" + comment.uid.slug}
                       >
-                        <path
-                          fill-rule="evenodd"
-                          d="M4.5 12a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </button>
+                        {comment.uid.firstname} {comment.uid.lastname}
+                      </a>
+                      <span class="mx-2">·</span>
+                      <span class="text-neutral-500 dark:text-neutral-400 text-xs line-clamp-1 sm:text-sm">
+                        {comment?.createdAt?.dateString}
+                      </span>
+                    </div>
+                    <span class="block text-neutral-700 mt-2 mb-3 sm:mt-3 sm:mb-4 dark:text-neutral-300">
+                      {comment.content}
+                    </span>
+                    <div
+                      class="nc-CommentCardLikeReply flex items-center space-x-2 "
+                      data-nc-id="CommentCardLikeReply"
+                    >
+                      <button
+                        class="min-w-[68px] flex items-center rounded-full leading-none px-3 h-8 text-xs focus:outline-none text-neutral-700 bg-neutral-100 dark:text-neutral-200 dark:bg-neutral-800 hover:bg-rose-50 hover:text-rose-600 dark:hover:text-rose-500"
+                        title="Liked"
+                      >
+                        <svg
+                          class="h-5 w-5 mr-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M11.995 7.23319C10.5455 5.60999 8.12832 5.17335 6.31215 6.65972C4.49599 8.14609 4.2403 10.6312 5.66654 12.3892L11.995 18.25L18.3235 12.3892C19.7498 10.6312 19.5253 8.13046 17.6779 6.65972C15.8305 5.18899 13.4446 5.60999 11.995 7.23319Z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                        <span class="text-neutral-900 dark:text-neutral-200">
+                          {comment.like}
+                        </span>
+                      </button>
+                      <button
+                        class="flex items-center min-w-[68px] rounded-full text-neutral-6000 bg-neutral-100 dark:text-neutral-200 dark:bg-neutral-800 px-3 h-8 hover:bg-teal-50 hover:text-teal-600 dark:hover:text-teal-500 focus:outline-none "
+                        title="Reply"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-[18px] w-[18px] mr-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                          ></path>
+                        </svg>
+                        <span
+                          class="text-xs leading-none text-neutral-900 dark:text-neutral-200"
+                          onclick={(e:any) => {
+                            e.preventDefault();
+                            setReply(true);
+                            replyingComment = comment
+                          }}
+                        >
+                          Reply
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <a
-                  class="flex-shrink-0 font-semibold text-neutral-800 dark:text-neutral-100"
-                  href="/author/the-demo-author-slug"
-                >
-                  Truelock Alric
-                </a>
-                <span class="mx-2">·</span>
-                <span class="text-neutral-500 dark:text-neutral-400 text-xs line-clamp-1 sm:text-sm">
-                  May 20, 2021
-                </span>
+                <div class="nc-NcModal"></div>
+                <div class="nc-NcModal"></div>
+                <div class="nc-NcModal"></div>
               </div>
-              <span class="block text-neutral-700 mt-2 mb-3 sm:mt-3 sm:mb-4 dark:text-neutral-300">
-                Praesent id massa id nisl venenatis lacinia. Aenean sit amet
-                justo. Morbi ut odio.
-              </span>
-              <div
-                class="nc-CommentCardLikeReply flex items-center space-x-2 "
-                data-nc-id="CommentCardLikeReply"
-              >
-                <button
-                  class="min-w-[68px] flex items-center rounded-full leading-none px-3 h-8 text-xs focus:outline-none text-neutral-700 bg-neutral-100 dark:text-neutral-200 dark:bg-neutral-800 hover:bg-rose-50 hover:text-rose-600 dark:hover:text-rose-500"
-                  title="Liked"
-                >
-                  <svg class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24">
-                    <path
-                      fill-rule="evenodd"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="1.5"
-                      d="M11.995 7.23319C10.5455 5.60999 8.12832 5.17335 6.31215 6.65972C4.49599 8.14609 4.2403 10.6312 5.66654 12.3892L11.995 18.25L18.3235 12.3892C19.7498 10.6312 19.5253 8.13046 17.6779 6.65972C15.8305 5.18899 13.4446 5.60999 11.995 7.23319Z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <span class="text-neutral-900 dark:text-neutral-200">96</span>
-                </button>
-                <button
-                  class="flex items-center min-w-[68px] rounded-full text-neutral-6000 bg-neutral-100 dark:text-neutral-200 dark:bg-neutral-800 px-3 h-8 hover:bg-teal-50 hover:text-teal-600 dark:hover:text-teal-500 focus:outline-none "
-                  title="Reply"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-[18px] w-[18px] mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="1.5"
-                      d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
-                    ></path>
-                  </svg>
-                  <span class="text-xs leading-none text-neutral-900 dark:text-neutral-200">
-                    Reply
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="nc-NcModal"></div>
-          <div class="nc-NcModal"></div>
-          <div class="nc-NcModal"></div>
+            );
+          })}
 
           {remainingNumComments > 0 ? (
             <button

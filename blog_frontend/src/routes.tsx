@@ -2,6 +2,7 @@ import Article from "./pages/Article";
 import Author from "./pages/Author";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Publisher from "./pages/Publisher";
 import RelatedPostByTag from "./pages/RelatedPostByTag";
 import Signup from "./pages/Signup";
 
@@ -11,6 +12,7 @@ export const routes = {
   "/article/:slug": Article,
   "/tag/:tagName": RelatedPostByTag,
   "/author": Author,
+  "/publisher": Publisher,
   "/login": Login,
   "/signup": Signup,
 };

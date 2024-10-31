@@ -29,17 +29,19 @@ class Reply extends BaseController {
     else this.status(true).statusCode(GET_SUCCESS).data('Replys', Replys).send()
   }
 
-  async create({ commentId, content }: any) {
-    const created = await ReplyModel.create({
+  async create({ uid, commentId, content }: any) {
+    const created = await (await ReplyModel.create({
+      uid: uid || this.user._id,
       commentId,
       content,
-    })
+    }))?.populate('uid')
     if (!created) this.status(false).statusCode(BAD_REQUEST).message('Error creating Reply').send()
     else this.status(true).statusCode(POST_SUCCESS).message('Reply created').data('created', created).send()
   }
 
-  async update({ id, commentId, content, like, status }: any) {
+  async update({ id, uid, commentId, content, like, status }: any) {
     const definedValues = getDefinedValuesFrom({
+      uid,
       commentId,
       content,
       like,

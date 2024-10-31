@@ -47,7 +47,7 @@ function Article() {
                   <TagSection />
                   <div class="max-w-screen-md mx-auto border-b border-t border-neutral-100 dark:border-neutral-700"></div>
                   <WrittenBy author={article?.author} />
-                  <CommentSection />
+                  <CommentSection articleId={article?._id}/>
                 </>
               )}
             </div>
