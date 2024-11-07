@@ -59,7 +59,7 @@ class MigrationModel {
   }
 
   async getAll() {
-    const models = []
+    const models: IAny[] = []
     for (const [name, model] of Object.entries(this.models)) {
       try {
         const docs = await (<Promise<any>>model!.find().exec())

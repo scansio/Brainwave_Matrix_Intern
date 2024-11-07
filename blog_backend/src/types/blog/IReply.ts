@@ -6,7 +6,7 @@ interface IReply extends ITimestamp {
   uid: IUser['_id']
   commentId: IComment['_id']
   content: string
-  like: number
+  likeByIds: IUser['_id'][]
 }
 
 export default IReply

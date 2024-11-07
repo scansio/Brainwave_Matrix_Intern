@@ -5,6 +5,7 @@ import ITag from '../../types/blog/ITag'
 export const TagSchema: Schema<ITag> = new Schema<ITag>({
   name: {
     type: String,
+    unique: true,
     required: [true, 'Tag name is required'],
   },
 })

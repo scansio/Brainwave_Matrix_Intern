@@ -8,6 +8,9 @@ import { startServerTerminatorListener } from './serverTerminatorEvent'
 import path from 'path'
 import { getRequestUrl } from '../common'
 import SharedConfig from '../libs/SharedConfig'
+import { createProxyMiddleware, RequestHandler } from 'http-proxy-middleware'
+import serverConfig from './serverConfig'
+import Logger from '../miscs/Logger'
 
 export const serverCertificateOptions = (): https.ServerOptions => {
   const caDir = path.resolve(__dirname, '..', '..', 'ca')
@@ -57,7 +60,7 @@ export default function createSecureServer({
     router.use((req, res, next) => {
       if (!req.secure) {
         const url = getRequestUrl(req).replace(isSocketServer ? 'ws:' : 'http:', isSocketServer ? 'wss' : 'https:')
-        return url
+        return res.redirect(url)
       }
       next()
     })
@@ -68,12 +71,36 @@ export default function createSecureServer({
       methods: ['GET', 'POST', 'PATCH', 'DELETE'] /*origin: "http://localhost:3000"*/,
     }),
   )
+  const proxifiers: { path: string; handler: RequestHandler<http.IncomingMessage> }[] = []
+
+  for (const config of Object.values(serverConfig)) {
+    if (config.scheme !== scheme) {
+      const temp = {
+        path: `/${config.scheme}`,
+        handler: createProxyMiddleware({
+          target: `${protocol}://localhost:${config.port}`, // The target server (CDN server)
+          changeOrigin: true, // Changes the origin of the host header to the target URL
+          pathRewrite: { [`^/${scheme}/${config.scheme}`]: '' }, // Rewrites the path to remove '/main/cdn'
+          logger: Logger, // Logs for debugging; remove or set to 'error' in production
+        }),
+      }
+      proxifiers.push(temp)
+    }
+  }
 
   router.use(express.json({ limit: '10mb' }))
   router.use(express.urlencoded({ extended: false }))
   router.use((req: Request, res: Response, next: NextFunction) => {
     SharedConfig.set('requestUrl', getRequestUrl(req))
-    next()
+    const pathname = req.path
+    const proxifier = proxifiers.find((prox) => {
+      return pathname.startsWith(prox.path)
+    })
+    if (proxifier) {
+      proxifier?.handler(req, res, next)
+    } else {
+      next()
+    }
   })
 
   app.use(`/${scheme}`, router)

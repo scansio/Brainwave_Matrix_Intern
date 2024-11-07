@@ -229,36 +229,38 @@ class User extends BaseController {
       country,
       state,
       phone,
+      slug,
       status,
     }: any = this.req.body
     await this.isValidUser(uid)
     await this.ownerAndAdminAccess(uid)
-    const definedValues = getDefinedValuesFrom({
+
+    const temp: any = {
       firstname,
       lastname,
       email,
-      role: (await this.adminAccess(false))
-        ? role == AuthenticationLevel.DEVELOPER
-          ? (await this.developerAccess(false))
-            ? AuthenticationLevel.DEVELOPER
-            : AuthenticationLevel.END_USER
-          : role == AuthenticationLevel.ADMIN
-          ? AuthenticationLevel.ADMIN
-          : AuthenticationLevel.END_USER
-        : AuthenticationLevel.END_USER,
+      slug,
+      bio: bio?.substring(0, 100),
+      avatar,
+      phone,
       status: (await this.adminAccess(false)) ? status : ACTIVE,
-    })
+    }
+
+    if (role) {
+      if (await this.developerAccess(false)) {
+        temp.role = role
+      }
+    }
+
+    const definedValues = getDefinedValuesFrom(temp)
 
     const userInfoUpdate: any = await UserModel.findByIdAndUpdate(uid, definedValues, {
       new: true,
     }).exec()
 
     const profile = getDefinedValuesFrom({
-      bio: bio?.substring(0, 100),
-      avatar,
       country,
       state,
-      phone,
     })
 
     const profileModel = await UserProfileModel.findOne({ uid }).exec()
@@ -570,21 +572,21 @@ class User extends BaseController {
   }
 
   async delete({ uid }: any): Promise<void> {
-    await this.adminAccess()
+    await this.developerAccess()
     const deleted = await UserModel.findByIdAndDelete(uid).exec()
     if (!deleted) this.status(false).statusCode(BAD_REQUEST).message('User failed to be deleted do to error').send()
     else {
       try {
         await UserEmailAuthenticationModel.deleteMany({ uid }).exec()
-      } catch (error) {}
+      } catch (error) { }
 
       try {
         await UserProfileModel.deleteMany({ uid }).exec()
-      } catch (error) {}
+      } catch (error) { }
 
       try {
         await UserSettingModel.deleteMany({ uid }).exec()
-      } catch (error) {}
+      } catch (error) { }
 
       this.status(true).statusCode(POST_SUCCESS).message('User account deleted').data('deleted', deleted).send()
     }

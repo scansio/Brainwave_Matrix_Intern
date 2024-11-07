@@ -14,12 +14,14 @@ for (const dir of readdirSync(versionsDir)) {
   let info: IAPIVersionInfo | null = null
 
   for (const filename of readdirSync(dirPath)) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const fetch = () => require(resolve(dirPath, filename)).default
-    if (filename === 'info.js') {
-      info = fetch()
-    } else {
-      controllerRoutes.push(fetch())
+    if (filename.endsWith('.js')) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const fetch = () => require(resolve(dirPath, filename)).default
+      if (filename === 'info.js') {
+        info = fetch()
+      } else {
+        controllerRoutes.push(fetch())
+      }
     }
   }
 

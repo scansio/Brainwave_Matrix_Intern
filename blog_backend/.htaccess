@@ -1,10 +1,10 @@
-RewriteEngine On
-
-DirectorySlash On
-RewriteBase /
-
-RewriteRule ^scheduling(.*)$ http://127.0.0.1:6098/scheduling/$1 [P]
-RewriteRule ^main(.*)$ http://127.0.0.1:3003/main/$1 [P]
-RewriteRule ^hook(.*)$ http://127.0.0.1:3002/hook/$1 [P]
-RewriteRule ^cdn(.*)$ http://127.0.0.1:2024/cdn/$1 [P]
-RewriteRule ^socket(.*)$ ws://127.0.0.1:2025/socket/$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]
+RewriteRule ^(.*)$ https://127.0.0.1:undefined//$1 [P]

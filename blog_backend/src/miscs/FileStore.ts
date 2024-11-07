@@ -6,21 +6,29 @@ import fs from 'fs'
 import IUser from '../types/IUser'
 
 class FileStore {
-  private isPublic: boolean
   private storage
   private upload
-  private controller: BaseController
-  private publicDir = `../../cdn/file_store/public`
-  private privateDir = `../../file_store/private/user`
+  private privateDir
+  private privateDirName
+  private publicDir
+  private publicDirName
   private activeDir
+  private activeDirName
 
-  constructor(controller: BaseController, isPublic = false, user?: IUser['_id']) {
-    this.isPublic = isPublic
-    this.controller = controller
-    this.privateDir = path.resolve(`${__dirname}/${this.privateDir}/${user ? user : this.controller.user._id}`)
-    this.publicDir = path.resolve(`${__dirname}/${this.publicDir}`)
+  constructor(
+    private controller: BaseController,
+    private isPublic = false,
+    private allowedFileTypes = ['image/jpeg', 'image/png'],
+    user?: IUser['_id'],
+  ) {
+    this.privateDirName = `/file_store/private/user/${user ? user : this.controller.user._id}`
+    this.publicDirName = `/cdn/file_store/${this.controller?.user?._id || 'anonymous'}`
+    this.privateDir = path.resolve(`${__dirname}/../..${this.privateDirName}`)
+    this.publicDir = path.resolve(`${__dirname}/../..${this.publicDirName}`)
     fs.mkdirSync(this.privateDir, { recursive: true })
+    fs.mkdirSync(this.publicDir, { recursive: true })
     this.activeDir = this.isPublic ? this.publicDir : this.privateDir
+    this.activeDirName = `${this.isPublic ? this.publicDirName : this.privateDirName}/`
     this.storage = multer.diskStorage({
       destination: (req, file, cb) => {
         cb(null, this.activeDir)
@@ -32,8 +40,7 @@ class FileStore {
     this.upload = multer({
       storage: this.storage,
       fileFilter: (req, file, cb) => {
-        const allowedFileTypes = ['image/jpeg', 'image/png']
-        if (allowedFileTypes.includes(file.mimetype)) {
+        if (this.allowedFileTypes.includes(file.mimetype)) {
           cb(null, true)
         } else {
           cb(new Error('Invalid file type. (jpeg or png only)'))
@@ -52,7 +59,7 @@ class FileStore {
         if (!file) {
           return reject(false)
         } else {
-          return resolve(file.filename)
+          return resolve(this.activeDirName + file.filename)
         }
       })
     })
@@ -72,7 +79,9 @@ class FileStore {
           if (!files || files.length === 0) {
             return reject(false)
           } else {
-            const filenames = (files as Express.Multer.File[]).map((file: Express.Multer.File) => file.filename)
+            const filenames = (files as Express.Multer.File[]).map(
+              (file: Express.Multer.File) => this.activeDirName + file.filename,
+            )
             return resolve(filenames)
           }
         },

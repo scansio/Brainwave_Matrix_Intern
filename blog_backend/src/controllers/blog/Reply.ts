@@ -7,6 +7,7 @@ import PaginatingModel from '../../models/PaginatingModel'
 import IReply from '../../types/blog/IReply'
 import IUser from '../../types/IUser'
 import BaseController from '../base/BaseController'
+import CommentModel from '../../models/blog/CommentModel'
 
 class Reply extends BaseController {
   constructor(req: Request, res: Response, next: NextFunction) {
@@ -15,6 +16,10 @@ class Reply extends BaseController {
 
   async init(): Promise<boolean | IUser | null | undefined> {
     return true
+  }
+
+  async like({ id }: any) {
+    await super.like({ model: ReplyModel, id })
   }
 
   async get({ id }: any) {
@@ -30,21 +35,29 @@ class Reply extends BaseController {
   }
 
   async create({ uid, commentId, content }: any) {
+    const comment = await CommentModel.findById(`${commentId}`).exec()
+    if (!comment) {
+      return this.status(false).statusCode(BAD_REQUEST).message('Comment not found').send()
+    }
     const created = await (await ReplyModel.create({
       uid: uid || this.user._id,
       commentId,
       content,
-    }))?.populate('uid')
+    }))?.populate(['uid'])
     if (!created) this.status(false).statusCode(BAD_REQUEST).message('Error creating Reply').send()
-    else this.status(true).statusCode(POST_SUCCESS).message('Reply created').data('created', created).send()
+    else {
+      comment.numReplys++
+      await comment.save()
+      this.status(true).statusCode(POST_SUCCESS).message('Reply created').data('created', created).send()
+    }
   }
 
-  async update({ id, uid, commentId, content, like, status }: any) {
+  async update({ id, uid, commentId, content, likeByIds, status }: any) {
     const definedValues = getDefinedValuesFrom({
       uid,
       commentId,
       content,
-      like,
+      likeByIds,
       status,
     })
     const updated = await ReplyModel.findByIdAndUpdate(id, definedValues, {

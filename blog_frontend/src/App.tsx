@@ -1,13 +1,27 @@
-import Reblend from "reblendjs";
+import Reblend, { SharedConfig } from "reblendjs";
 import Router, { Route } from "reblend-router";
 import Notfound from "./pages/Notfound";
 import ErrorHandler from "./layouts/ErrorHandler";
 import { routes } from "./routes";
-import { ToastContainer } from "react-toast";
+import { UID } from "./scripts/config/contants";
+import { rand } from "./scripts/md5";
 
 function App() {
+  if (!SharedConfig.getLocalData(UID)) {
+    SharedConfig.setLocalData(
+      UID,
+      (crypto && crypto.randomUUID && crypto.randomUUID()) ||
+        rand(0x9988aac, 0xfffffff)
+    );
+  }
+
   return (
     <>
+      <style>
+        {`a {
+            text-decoration: none !important;
+          }`}
+      </style>
       <Notfound />
       <Router />
       {Object.entries(routes).map(([path, Component]) => (
@@ -20,7 +34,6 @@ function App() {
           path={path}
         />
       ))}
-      <ToastContainer />
     </>
   );
 }

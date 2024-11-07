@@ -4,8 +4,8 @@ import { Link, Navigate, redirectTo } from "reblend-router";
 import { LOGIN } from "../scripts/config/RestEndpoints";
 import fetcher from "../scripts/SharedFetcher";
 import { TO_VISIT_URL_KEY, UID } from "../scripts/config/contants";
-import { toast } from "react-toast";
-import { Modal, ModalBody, ModalHeader, ModalTitle } from "react-bootstrap";
+import { toast, ToastContainer } from "react-toastify";
+import { Modal, ModalBody, ModalHeader } from "react-bootstrap";
 
 function Login() {
   const [authToken, setAuthToken] = useContext(authTokenContext);
@@ -44,21 +44,13 @@ function Login() {
   ) : (
     <>
       <div class="container">
-        <div class="relative py-16" bis_skin_checked="1">
-          <div
-            class="absolute inset-y-0 w-screen xl:max-w-[1340px] 2xl:max-w-screen-2xl left-1/2 transform -translate-x-1/2 xl:rounded-[40px] z-0 bg-neutral-100 dark:bg-black dark:bg-opacity-20"
-            bis_skin_checked="1"
-          >
+        <ToastContainer />
+        <div class="relative py-16">
+          <div class="absolute inset-y-0 w-screen xl:max-w-[1340px] 2xl:max-w-screen-2xl left-1/2 transform -translate-x-1/2 xl:rounded-[40px] z-0 bg-neutral-100 dark:bg-black dark:bg-opacity-20">
             <span class="sr-only hidden">bg</span>
           </div>
-          <div
-            class="nc-SectionBecomeAnAuthor relative flex flex-col lg:flex-row items-center  "
-            bis_skin_checked="1"
-          >
-            <div
-              class="flex-shrink-0 mb-14 lg:mb-0 lg:mr-10 lg:w-2/5"
-              bis_skin_checked="1"
-            >
+          <div class="nc-SectionBecomeAnAuthor relative flex flex-col lg:flex-row items-center  ">
+            <div class="flex-shrink-0 mb-14 lg:mb-0 lg:mr-10 lg:w-2/5">
               <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div class="sm:mx-auto sm:w-full sm:max-w-sm">
                   <img
@@ -85,7 +77,7 @@ function Login() {
                           id="email"
                           name="email"
                           type="email"
-                          autocomplete="email"
+                          autoComplete="email"
                           value={email}
                           onchange={(e) => setEmail(e.target.value)}
                           required
@@ -120,7 +112,7 @@ function Login() {
                           type="password"
                           value={password}
                           onchange={(e) => setPassword(e.target.value)}
-                          autocomplete="password"
+                          autoComplete="password"
                           required
                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
@@ -150,7 +142,7 @@ function Login() {
                 </div>
               </div>
             </div>
-            <div class="flex-grow" bis_skin_checked="1">
+            <div class="flex-grow">
               <img
                 sizes="(max-width: 768px) 100vw, 50vw"
                 src="/static/media/BecomeAnAuthorImg.02703848a9dd53f8bbac.png"
@@ -161,6 +153,8 @@ function Login() {
           </div>
         </div>
       </div>
+
+      {/* Forget password modal starts*/}
       <Modal
         show={forgotPassword}
         onHide={() => setForgotPassword(false)}
@@ -188,7 +182,7 @@ function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
-                    required=""
+                    required
                   />
                   <button class="btn btn-primary a link float-right mt-2 mb-4">
                     Get code
@@ -207,7 +201,7 @@ function Login() {
                     id="code"
                     placeholder="••••••••"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
+                    required
                   />
                 </div>
                 <div>
@@ -223,7 +217,7 @@ function Login() {
                     id="password"
                     placeholder="••••••••"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
+                    required
                   />
                 </div>
                 <div>
@@ -239,7 +233,7 @@ function Login() {
                     id="confirm-password"
                     placeholder="••••••••"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
+                    required
                   />
                 </div>
                 <div class="flex items-start">
@@ -249,7 +243,7 @@ function Login() {
                       aria-describedby="newsletter"
                       type="checkbox"
                       class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required=""
+                      required
                     />
                   </div>
                   <div class="ml-3 text-sm">
@@ -278,6 +272,7 @@ function Login() {
           </div>
         </ModalBody>
       </Modal>
+      {/* Forget password ends */}
     </>
   );
 }

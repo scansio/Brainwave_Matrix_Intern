@@ -4,14 +4,15 @@ import dotenv from 'dotenv'
 import compression from 'compression'
 import createSecureServer from './createSecureServer'
 import Logger from '../miscs/Logger'
+import serverConfig from './serverConfig'
 ;(async () => {
   dotenv.config()
 
   const app = express()
   const router = Router()
   const serverName = 'CdnServer'
-  const CDN_PORT = process.env.CDN_PORT
-  const CDN_SCHEME = process.env.CDN_SCHEME
+  const CDN_PORT = serverConfig.CDN_SERVER.port
+  const CDN_SCHEME = serverConfig.CDN_SERVER.scheme
 
   // Enable compression for all responses
   app.use(compression())
@@ -20,8 +21,8 @@ import Logger from '../miscs/Logger'
     app,
     router,
     serverName,
-    scheme: CDN_SCHEME || '',
-    port: CDN_PORT as string,
+    scheme: CDN_SCHEME,
+    port: CDN_PORT,
   })
 
   const cdnDir = path.join(__dirname, '..', '..', 'cdn')

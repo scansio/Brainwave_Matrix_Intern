@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express'
 import Sender from './Sender'
 import AllError from '../../exceptions/base/AllError'
@@ -9,7 +11,7 @@ import {
   TransactionType,
 } from '../../configs/constants'
 import IUser from '../../types/IUser'
-import { BAD_AUTHORIZATION, BAD_REQUEST, NOTFOUND } from '../../configs/statusCodeConstants'
+import { BAD_AUTHORIZATION, BAD_REQUEST, GET_SUCCESS, NOTFOUND } from '../../configs/statusCodeConstants'
 import {
   INCORRECT_TRANSACTION_PIN,
   INVALID_AMOUNT,
@@ -22,6 +24,7 @@ import SharedConfig from '../../libs/SharedConfig'
 import { getUser } from '../../common'
 import MaintenanceException from '../../exceptions/MaintenanceException'
 import AuthenticationException from '../../exceptions/AuthenticationException'
+import { HydratedDocument, Model } from 'mongoose'
 
 class BaseController extends Sender {
   constructor(req: Request, res: Response, next: NextFunction) {
@@ -225,6 +228,33 @@ class BaseController extends Sender {
       }
     }
     return null
+  }
+
+  async like<T>({ model, id }: { model: Model<T>; id: string }) {
+    const found: HydratedDocument<{ likeByIds: number[] }, {}, {}> | null = (await model
+      .findById(`${id}`)
+      .exec()) as any
+    if (!found)
+      this.status(false)
+        .statusCode(NOTFOUND)
+        .message(model.modelName + ' not found')
+        .send()
+    else {
+      let liked = false
+      if (found.likeByIds?.includes(this.user._id)) {
+        found.likeByIds = found.likeByIds.filter((likedById) => likedById != this.user._id)
+      } else {
+        found.likeByIds.push(this.user._id)
+        liked = true
+      }
+      await found.save()
+      this.status(true)
+        .statusCode(GET_SUCCESS)
+        .data(model.modelName, found)
+        .data('liked', liked)
+        .message(liked ? 'Liked' : 'Unliked')
+        .send()
+    }
   }
 }
 

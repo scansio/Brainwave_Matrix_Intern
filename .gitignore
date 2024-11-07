@@ -1,0 +1,6 @@
+**/*.log
+/dist
+/*.log
+*log
+blog_backend/cdn/file_store/*
+blog_backend/dist/*

@@ -8,21 +8,22 @@ import { RequestMethods } from '../../RequestMethods'
 const CommentRoutes: IControllerRoute = {
   tag: 'Comment',
   controller: Comment,
-  baseUrl: '/article',
+  baseUrl: '/comment',
   routes: [
     {
-      path: '/article/all',
+      path: '/comment/all',
       validation: { query: { q: {} } },
 
       controllerMemberFunctionIdentifier: Comment.prototype.all,
       method: RequestMethods.GET,
       metadata: {
-        summary: 'Get all articles',
+        summary: 'Get all comments',
       },
       requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
-      path: '/article/:id([0-9a-fA-F]{24})',
+      path: '/comment/like/:id([0-9a-fA-F]{24})',
+      controllerMemberFunctionIdentifier: Comment.prototype.like,
       validation: {
         param: {
           id: {
@@ -32,28 +33,43 @@ const CommentRoutes: IControllerRoute = {
       },
       method: RequestMethods.GET,
       metadata: {
-        summary: 'Get article by id',
+        summary: 'Like a Comment by id',
       },
       requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
-      path: '/article',
+      path: '/comment/:id([0-9a-fA-F]{24})',
+      validation: {
+        param: {
+          id: {
+            notEmpty: {},
+          },
+        },
+      },
+      method: RequestMethods.GET,
+      metadata: {
+        summary: 'Get comment by id',
+      },
+      requireAuthentication: AuthenticationLevel.END_USER,
+    },
+    {
+      path: '/comment',
       method: RequestMethods.POST,
       metadata: {
-        summary: 'Create article',
+        summary: 'Create comment',
       },
       requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
-      path: '/article',
+      path: '/comment',
       method: RequestMethods.PATCH,
       metadata: {
-        summary: 'Update article',
+        summary: 'Update comment',
       },
       requireAuthentication: AuthenticationLevel.ADMIN,
     },
     {
-      path: '/article/:id([0-9a-fA-F]{24})',
+      path: '/comment/:id([0-9a-fA-F]{24})',
       validation: {
         param: {
           id: {
@@ -63,13 +79,13 @@ const CommentRoutes: IControllerRoute = {
       },
       method: RequestMethods.DELETE,
       metadata: {
-        summary: 'Delete article',
+        summary: 'Delete comment',
       },
       requireAuthentication: AuthenticationLevel.ADMIN,
     },
   ],
   schema: getObject(CommentSchema),
-  description: 'Operation on article',
+  description: 'Operation on comment',
 }
 
 export default CommentRoutes

@@ -13,6 +13,9 @@ interface IUser extends ITimestamp {
   pin?: string
   oauth: boolean
   phone: number
+  slug: string,
+  bio: string,
+  avatar: string,
 }
 
 export default IUser

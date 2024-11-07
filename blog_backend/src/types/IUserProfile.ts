@@ -8,6 +8,5 @@ interface IUserProfile extends ITimestamp {
   phone: number
   bio: string
   avatar: string
-  slug: string
 }
 export default IUserProfile

@@ -11,18 +11,6 @@ export const UserProfileSchema = new mongoose.Schema<IUserProfile>({
   },
   country: Number,
   state: Number,
-  phone: {
-    type: Number,
-    minLength: 7,
-    maxLength: 10,
-  },
-  bio: {
-    type: String,
-  },
-  avatar: {
-    type: String,
-  },
-  slug: String,
 })
 
 const UserProfileModel = mongoose.model<IUserProfile>('UserProfile', TimestampsPlugin(UserProfileSchema))

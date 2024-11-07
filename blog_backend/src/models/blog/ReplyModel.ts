@@ -6,9 +6,9 @@ import UserModel from '../UserModel'
 
 export const ReplySchema: Schema<IReply> = new Schema<IReply>({
   uid: {
-    type: Schema.Types.ObjectId,
+    type: Number,
     ref: UserModel.modelName,
-    required: [true, 'Comment ID is required'],
+    required: [true, 'User ID is required'],
   },
   commentId: {
     type: Schema.Types.ObjectId,
@@ -19,7 +19,11 @@ export const ReplySchema: Schema<IReply> = new Schema<IReply>({
     type: String,
     required: [true, 'Reply content is required'],
   },
-  like: Number,
+  likeByIds: {
+    type: [Number],
+    ref: UserModel.modelName,
+    default: [],
+  },
 })
 
 const ReplyModel = mongoose.model<IReply>('Reply', TimestampsPlugin(ReplySchema))

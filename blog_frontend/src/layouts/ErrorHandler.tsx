@@ -11,7 +11,7 @@ class ErrorHandler extends Reblend<
   _constructor() {
     super._constructor();
     this.renderingErrorHandler = (error) => {
-      console.log(error.component.displayName, ": ", error.message);
+      console.log(error.component.displayName, ": ", error);
       this.setState({ errorMessage: error?.message || "" });
     };
   }

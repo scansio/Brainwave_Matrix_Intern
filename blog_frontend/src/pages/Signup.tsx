@@ -1,10 +1,10 @@
 import { Link, Navigate, redirectTo } from "reblend-router";
 import Reblend, { SharedConfig, useContext, useState } from "reblendjs";
 import fetcher from "../scripts/SharedFetcher";
-import { toast } from "react-toast";
 import { USER_BASE } from "../scripts/config/RestEndpoints";
 import { authTokenContext } from "../context";
 import { TO_VISIT_URL_KEY } from "../scripts/config/contants";
+import { toast, ToastContainer } from "react-toastify";
 
 function Signup() {
   const [authToken] = useContext(authTokenContext);
@@ -51,21 +51,13 @@ function Signup() {
   ) : (
     <>
       <div class="container">
-        <div class="relative py-16" bis_skin_checked="1">
-          <div
-            class="absolute inset-y-0 w-screen xl:max-w-[1340px] 2xl:max-w-screen-2xl left-1/2 transform -translate-x-1/2 xl:rounded-[40px] z-0 bg-neutral-100 dark:bg-black dark:bg-opacity-20"
-            bis_skin_checked="1"
-          >
+        <ToastContainer position="bottom-center" />
+        <div class="relative py-16">
+          <div class="absolute inset-y-0 w-screen xl:max-w-[1340px] 2xl:max-w-screen-2xl left-1/2 transform -translate-x-1/2 xl:rounded-[40px] z-0 bg-neutral-100 dark:bg-black dark:bg-opacity-20">
             <span class="sr-only hidden">bg</span>
           </div>
-          <div
-            class="nc-SectionBecomeAnAuthor relative flex flex-col lg:flex-row items-center  "
-            bis_skin_checked="1"
-          >
-            <div
-              class="flex-shrink-0 mb-14 lg:mb-0 lg:mr-10 lg:w-2/5"
-              bis_skin_checked="1"
-            >
+          <div class="nc-SectionBecomeAnAuthor relative flex flex-col lg:flex-row items-center  ">
+            <div class="flex-shrink-0 mb-14 lg:mb-0 lg:mr-10 lg:w-2/5">
               <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div class="sm:mx-auto sm:w-full sm:max-w-sm">
                   <img
@@ -94,7 +86,7 @@ function Signup() {
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          autocomplete="email"
+                          autoComplete="email"
                           required
                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
@@ -114,7 +106,7 @@ function Signup() {
                           type="text"
                           value={firstname}
                           onChange={(e) => setFirstname(e.target.value)}
-                          autocomplete="firstname"
+                          autoComplete="firstname"
                           required
                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
@@ -134,7 +126,7 @@ function Signup() {
                           type="text"
                           value={lastname}
                           onChange={(e) => setLastname(e.target.value)}
-                          autocomplete="lastname"
+                          autoComplete="lastname"
                           required
                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
@@ -155,7 +147,7 @@ function Signup() {
                           type="text"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
-                          autocomplete="phone"
+                          autoComplete="phone"
                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                       </div>
@@ -169,14 +161,6 @@ function Signup() {
                         >
                           Password
                         </label>
-                        <div class="text-sm">
-                          <a
-                            href="#"
-                            class="font-semibold text-indigo-600 hover:text-indigo-500"
-                          >
-                            Forgot password?
-                          </a>
-                        </div>
                       </div>
                       <div class="mt-2">
                         <input
@@ -189,6 +173,8 @@ function Signup() {
                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                       </div>
+                    </div>
+                    <div>
                       <div class="flex items-center justify-between">
                         <label
                           for="confirm-password"
@@ -210,7 +196,6 @@ function Signup() {
                         />
                       </div>
                     </div>
-
                     <div>
                       <button
                         type="submit"
@@ -234,7 +219,7 @@ function Signup() {
                 </div>
               </div>
             </div>
-            <div class="flex-grow" bis_skin_checked="1">
+            <div class="flex-grow">
               <img
                 src="/static/media/onboarding1.png"
                 class="w-full"

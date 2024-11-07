@@ -22,6 +22,22 @@ const ReplyRoutes: IControllerRoute = {
       requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
+      path: '/reply/like/:id([0-9a-fA-F]{24})',
+      controllerMemberFunctionIdentifier: Reply.prototype.like,
+      validation: {
+        param: {
+          id: {
+            notEmpty: {},
+          },
+        },
+      },
+      method: RequestMethods.GET,
+      metadata: {
+        summary: 'Like a Reply by id',
+      },
+      requireAuthentication: AuthenticationLevel.END_USER,
+    },
+    {
       path: '/reply/:id([0-9a-fA-F]{24})',
       validation: {
         param: {

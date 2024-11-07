@@ -5,11 +5,12 @@ import mongoose from 'mongoose'
 import Routing from '../miscs/Routing'
 import terminator from '../terminator'
 import createSecureServer, { onClose } from './createSecureServer'
+import serverConfig from './serverConfig'
 ;(async () => {
   const app: Express = express()
   dotenv.config()
-  const MAIN_SERVER_PORT: number = process.env.MAIN_SERVER_PORT as any
-  const MAIN_SERVER_SCHEME = process.env.MAIN_SERVER_SCHEME || ''
+  const MAIN_SERVER_PORT: number = serverConfig.MAIN_SERVER.port
+  const MAIN_SERVER_SCHEME = serverConfig.MAIN_SERVER.scheme
   const router = Router()
   const serverName = 'MainServer'
   const server = createSecureServer({

@@ -19,6 +19,31 @@ const ArticleRoutes: IControllerRoute = {
       metadata: {
         summary: 'Get all articles',
       },
+    },
+    {
+      path: '/article/slug/:slug',
+      validation: { param: { slug: {} } },
+
+      controllerMemberFunctionIdentifier: Article.prototype.slug,
+      method: RequestMethods.GET,
+      metadata: {
+        summary: 'Get an article by slug',
+      },
+    },
+    {
+      path: '/article/like/:id([0-9a-fA-F]{24})',
+      controllerMemberFunctionIdentifier: Article.prototype.like,
+      validation: {
+        param: {
+          id: {
+            notEmpty: {},
+          },
+        },
+      },
+      method: RequestMethods.GET,
+      metadata: {
+        summary: 'Like a Article by id',
+      },
       requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
@@ -34,7 +59,14 @@ const ArticleRoutes: IControllerRoute = {
       metadata: {
         summary: 'Get article by id',
       },
-      requireAuthentication: AuthenticationLevel.END_USER,
+    },
+    {
+      path: '/article/read',
+      method: RequestMethods.POST,
+      controllerMemberFunctionIdentifier: Article.prototype.read,
+      metadata: {
+        summary: 'Mark article read for a user',
+      },
     },
     {
       path: '/article',
@@ -50,7 +82,7 @@ const ArticleRoutes: IControllerRoute = {
       metadata: {
         summary: 'Update article',
       },
-      requireAuthentication: AuthenticationLevel.ADMIN,
+      requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
       path: '/article/:id([0-9a-fA-F]{24})',

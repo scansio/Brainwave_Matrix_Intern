@@ -8,6 +8,7 @@ import * as path from 'path'
 import * as child_process from 'child_process'
 import * as fs from 'fs'
 import dotenv from 'dotenv'
+import IAny from './types/IAny'
 
 enum WriteType {
   BASE,
@@ -182,7 +183,7 @@ class RepoHooks {
     process.chdir(repoDir)
 
     try {
-      const commandReturns = []
+      const commandReturns: Promise<any>[] = []
       let lock = 0
       for (let i = 0; i < commands.length; i++) {
         const command = commands[i]
@@ -280,7 +281,7 @@ class RepoHooks {
 
   private getData(type?: number, name?: string): Configuration | Credential | { [k: string]: string } | string {
     const config = Config as any as Configuration
-    let value = null
+    let value: null | string | Credential | IAny = null
 
     switch (type) {
       case ReadType.CREDENTIAL:

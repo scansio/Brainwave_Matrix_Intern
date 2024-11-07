@@ -17,7 +17,11 @@ export const ArticleSchema: Schema<IArticle> = new Schema<IArticle>({
     type: String,
     required: [true, 'Article body is required'],
   },
-  like: Number,
+  likeByIds: {
+    type: [Number],
+    ref: UserModel.modelName,
+    default: [],
+  },
   title: {
     type: String,
     required: [true, 'Title is required'],
@@ -30,6 +34,20 @@ export const ArticleSchema: Schema<IArticle> = new Schema<IArticle>({
     type: String,
     required: [true, 'Seo description is required'],
   },
+  numComments: {
+    type: Number,
+    default: 0,
+  },
+  tags: {
+    type: [String],
+    default: [],
+  },
+  readingTimeInMinute: { type: Number, required: [true, 'Reading time required'] },
+  readers: {
+    type: [Number],
+    default: [],
+  },
+  published: Boolean,
 })
 
 const ArticleModel = mongoose.model<IArticle>('Article', TimestampsPlugin(ArticleSchema))

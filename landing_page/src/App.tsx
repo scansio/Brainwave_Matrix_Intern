@@ -1414,7 +1414,7 @@ function App() {
                                                 id="query-builder-test"
                                                 name="query-builder-test"
                                                 value=""
-                                                autocomplete="off"
+                                                autoComplete="off"
                                                 type="text"
                                                 role="combobox"
                                                 spellcheck="false"
@@ -1430,7 +1430,7 @@ function App() {
                                                 data-view-component="true"
                                                 class="FormControl-input QueryBuilder-Input FormControl-medium"
                                                 aria-controls="query-builder-test-results"
-                                                aria-autocomplete="list"
+                                                aria-autoComplete="list"
                                                 aria-haspopup="listbox"
                                                 style="width: 300px;"
                                               />
@@ -2421,7 +2421,7 @@ function App() {
                                         </label>
                                         <auto-check
                                           src="/search/custom_scopes/check_name"
-                                          required=""
+                                          required
                                         >
                                           <input
                                             type="text"
@@ -2429,9 +2429,9 @@ function App() {
                                             id="custom_scope_name"
                                             data-target="custom-scopes.customScopesNameField"
                                             class="form-control"
-                                            autocomplete="off"
+                                            autoComplete="off"
                                             placeholder="github-ruby"
-                                            required=""
+                                            required
                                             maxlength="50"
                                             spellcheck="false"
                                           />
@@ -2453,9 +2453,9 @@ function App() {
                                           id="custom_scope_query"
                                           data-target="custom-scopes.customScopesQueryField"
                                           class="form-control"
-                                          autocomplete="off"
+                                          autoComplete="off"
                                           placeholder="(repo:mona/a OR repo:mona/b) AND lang:python"
-                                          required=""
+                                          required
                                           maxlength="500"
                                         />
                                       </div>
@@ -2897,7 +2897,7 @@ function App() {
                           <form
                             data-turbo="false"
                             class="mx-0 col-12 col-md-7 col-lg-5 js-signup-form position-relative z-2"
-                            autocomplete="off"
+                            autoComplete="off"
                             action="/signup"
                             accept-charset="UTF-8"
                             method="get"
@@ -2914,9 +2914,9 @@ function App() {
                                 type="email"
                                 name="user_email"
                                 id="hero_user_email"
-                                autocomplete="off"
+                                autoComplete="off"
                                 spellcheck="false"
-                                required=""
+                                required
                               />
                               <input
                                 type="hidden"
@@ -5193,7 +5193,7 @@ function App() {
                           <form
                             data-turbo="false"
                             class="mx-0 col-12 col-md-7 col-lg-5 js-signup-form position-relative z-2"
-                            autocomplete="off"
+                            autoComplete="off"
                             action="/signup"
                             accept-charset="UTF-8"
                             method="get"
@@ -5210,9 +5210,9 @@ function App() {
                                 type="email"
                                 name="user_email"
                                 id="footer_user_email"
-                                autocomplete="off"
+                                autoComplete="off"
                                 spellcheck="false"
-                                required=""
+                                required
                               />
                               <input
                                 type="hidden"

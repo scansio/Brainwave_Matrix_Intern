@@ -63,6 +63,9 @@ export const UserSchema = new Schema<IUser>({
   },
   dob: Date,
   phone: { type: Number, minLength: 7, maxLength: 10/* , required: true */ },
+  slug: String,
+  bio: String,
+  avatar: String,
 })
 
 const UserModel = mongoose.model<IUser>('User', TimestampsPlugin(UserSchema))

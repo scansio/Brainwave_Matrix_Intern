@@ -562,3 +562,12 @@ export const getObject = (scm: Schema) => {
   })
   return obj
 }
+
+export function calculateReadingTimeInMinute(htmlContent: string): number {
+  const text = new JSDOM(htmlContent).window.document.body.textContent || ''
+  const wordCount = text.split(/\s+/).filter((word) => word.length > 0).length
+  const wordsPerMinute = 200
+  const readingTimeInMinutes = Math.ceil(wordCount / wordsPerMinute)
+
+  return readingTimeInMinutes
+}

@@ -7,6 +7,7 @@ import PaginatingModel from '../../models/PaginatingModel'
 import IComment from '../../types/blog/IComment'
 import IUser from '../../types/IUser'
 import BaseController from '../base/BaseController'
+import ArticleModel from '../../models/blog/ArticleModel'
 
 class Comment extends BaseController {
   constructor(req: Request, res: Response, next: NextFunction) {
@@ -15,6 +16,10 @@ class Comment extends BaseController {
 
   async init(): Promise<boolean | IUser | null | undefined> {
     return true
+  }
+
+  async like({ id }: any) {
+    await super.like({ model: CommentModel, id })
   }
 
   async get({ id }: any) {
@@ -29,21 +34,34 @@ class Comment extends BaseController {
     else this.status(true).statusCode(GET_SUCCESS).data('Comments', Comments).send()
   }
 
-  async create({ articleId, content }: any) {
-    const created = await CommentModel.create({
-      articleId,
-      content,
-    })
+  async create({ uid, articleId, content }: any) {
+    const article = await ArticleModel.findById(`${articleId}`).exec()
+    if (!article) {
+      return this.status(false).statusCode(BAD_REQUEST).message('Article not found').send()
+    }
+
+    const created = await (
+      await CommentModel.create({
+        uid: uid || this.user._id,
+        articleId: article,
+        content,
+      })
+    )?.populate(['uid'])
     if (!created) this.status(false).statusCode(BAD_REQUEST).message('Error creating Comment').send()
-    else this.status(true).statusCode(POST_SUCCESS).message('Comment created').data('created', created).send()
+    else {
+      article.numComments++
+      await article.save()
+      this.status(true).statusCode(POST_SUCCESS).message('Comment created').data('created', created).send()
+    }
   }
 
-  async update({ id, articleId, replyIds, content, like, status }: any) {
+  async update({ id, articleId, replyIds, content, likeByIds, numReplys, status }: any) {
     const definedValues = getDefinedValuesFrom({
       articleId,
       replyIds,
       content,
-      like,
+      likeByIds,
+      numReplys,
       status,
     })
     const updated = await CommentModel.findByIdAndUpdate(id, definedValues, {
