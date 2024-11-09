@@ -63,6 +63,7 @@ function EditorsPick() {
         paginatingUrl(ALL_ARTICLE, {
           populate: ["author"],
           $sort: { readers: -1 },
+          published: true,
           status: ACTIVE,
         })
       )

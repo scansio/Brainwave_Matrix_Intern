@@ -1,7 +1,7 @@
 import Reblend, { SharedConfig, useContext, useState } from "reblendjs";
 import { authTokenContext } from "../context";
 import { Link, Navigate, redirectTo } from "reblend-router";
-import { LOGIN } from "../scripts/config/RestEndpoints";
+import { LOGIN, USER_DETAIL } from "../scripts/config/RestEndpoints";
 import fetcher from "../scripts/SharedFetcher";
 import { TO_VISIT_URL_KEY, UID } from "../scripts/config/contants";
 import { toast, ToastContainer } from "react-toastify";
@@ -26,8 +26,14 @@ function Login() {
         if (data?.data?.status) {
           SharedConfig.setLocalData(UID, data.connection.uid);
           setAuthToken(data.data.token);
-          toast.success(data.data.message);
-          redirectTo(SharedConfig.getFlashData(TO_VISIT_URL_KEY) || "/");
+          fetcher
+            .fetch(USER_DETAIL)
+            .then((data) => {
+              if (data?.data?.status) {
+                SharedConfig.setLocalData("user", data.data.user);
+              }
+            })
+            .catch(() => {});
         } else {
           toast.error(data?.data?.message || "Error");
         }
@@ -53,12 +59,14 @@ function Login() {
             <div class="flex-shrink-0 mb-14 lg:mb-0 lg:mr-10 lg:w-2/5">
               <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-                  <img
-                    class="mx-auto h-10 w-auto"
-                    src="/logo512.png"
-                    alt="Logo"
-                  />
-                  <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                  <Link href="/">
+                    <img
+                      class="mx-auto h-50 w-50 rounded-full"
+                      src="/blognest.logo.background.webp"
+                      alt="Logo"
+                    />
+                  </Link>
+                  <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                     Sign in to your account
                   </h2>
                 </div>
@@ -79,7 +87,7 @@ function Login() {
                           type="email"
                           autoComplete="email"
                           value={email}
-                          onchange={(e) => setEmail(e.target.value)}
+                          onChange={(e) => setEmail(e.target.value)}
                           required
                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
@@ -97,9 +105,10 @@ function Login() {
                         <div class="text-sm">
                           <button
                             class="font-semibold text-indigo-600 hover:text-indigo-500 a link"
-                            onClick={(e) => (
-                              e.preventDefault(), setForgotPassword(true)
-                            )}
+                            onClick={(e: any) => {
+                              e.preventDefault();
+                              setForgotPassword(true);
+                            }}
                           >
                             Forgot password?
                           </button>
@@ -111,7 +120,7 @@ function Login() {
                           name="password"
                           type="password"
                           value={password}
-                          onchange={(e) => setPassword(e.target.value)}
+                          onChange={(e) => setPassword(e.target.value)}
                           autoComplete="password"
                           required
                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

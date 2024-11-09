@@ -7,7 +7,7 @@ import Authenticate from '../miscs/Authenticate'
 import { getDefinedValuesFrom, getUser } from '../common'
 import { rand } from '../libs/md5'
 import { NextFunction, Request, Response } from 'express'
-import { ACTIVE, AuthenticationLevel, HOTLISTED, MIN } from '../configs/constants'
+import { ACTIVE, HOTLISTED, MIN } from '../configs/constants'
 import Mailer from '../miscs/Mailer'
 import UserEmailAuthenticationModel from '../models/UserEmailAuthenticationModel'
 import IUser from '../types/IUser'
@@ -78,7 +78,7 @@ class User extends BaseController {
       if (isAdmin) {
         this.statusCode(NOTFOUND).errorCode(USER_NOTFOUND).error(`A user with email: ${email} does not exist`).send()
       } else {
-        this.statusCode(BAD_AUTHENTICATION)
+        this.statusCode(BAD_REQUEST)
           .error(this.oauth2 ? 'Could not verify your account try again shortly' : 'Invalid credentials.')
           .send()
       }
@@ -96,7 +96,7 @@ class User extends BaseController {
           .error('Account suspended for policy violation')
           .send()
       } else {
-        this.statusCode(BAD_AUTHENTICATION).errorCode(UNVERIFIED).error('Please verify your email').send()
+        this.statusCode(BAD_REQUEST).errorCode(UNVERIFIED).error('Please verify your email').send()
       }
     }
   }
@@ -164,7 +164,8 @@ class User extends BaseController {
       user = await UserModel.create({
         _id,
         firstname: names[0],
-        lastname: names[0],
+        lastname: names[1],
+        slug: `${names[0]} ${names[1]}`,
         email: this.oauth2?.emails && this.oauth2?.emails[0],
         oauth: true,
         status: ACTIVE,
@@ -239,8 +240,14 @@ class User extends BaseController {
       firstname,
       lastname,
       email,
-      slug,
-      bio: bio?.substring(0, 100),
+      slug:
+        slug &&
+        slug
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, '')
+          .replace(/-+$/, ''),
+      bio: bio?.substring(0, 500),
       avatar,
       phone,
       status: (await this.adminAccess(false)) ? status : ACTIVE,
@@ -578,15 +585,15 @@ class User extends BaseController {
     else {
       try {
         await UserEmailAuthenticationModel.deleteMany({ uid }).exec()
-      } catch (error) { }
+      } catch (error) {}
 
       try {
         await UserProfileModel.deleteMany({ uid }).exec()
-      } catch (error) { }
+      } catch (error) {}
 
       try {
         await UserSettingModel.deleteMany({ uid }).exec()
-      } catch (error) { }
+      } catch (error) {}
 
       this.status(true).statusCode(POST_SUCCESS).message('User account deleted').data('deleted', deleted).send()
     }

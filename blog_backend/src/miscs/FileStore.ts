@@ -39,6 +39,10 @@ class FileStore {
     })
     this.upload = multer({
       storage: this.storage,
+      limits: {
+        fieldSize: 2 * 1024 * 1024, // Set max size for non-file fields (e.g., text fields)
+        fileSize: 5 * 1024 * 1024, // Set max size for uploaded files (e.g., images)
+      },
       fileFilter: (req, file, cb) => {
         if (this.allowedFileTypes.includes(file.mimetype)) {
           cb(null, true)

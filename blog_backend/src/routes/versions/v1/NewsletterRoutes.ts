@@ -19,7 +19,7 @@ const NewsletterRoutes: IControllerRoute = {
       metadata: {
         summary: 'Get all newsletters',
       },
-      requireAuthentication: AuthenticationLevel.END_USER,
+      requireAuthentication: AuthenticationLevel.ADMIN,
     },
     {
       path: '/newsletter/:id([0-9a-fA-F]{24})',
@@ -34,7 +34,7 @@ const NewsletterRoutes: IControllerRoute = {
       metadata: {
         summary: 'Get newsletter by id',
       },
-      requireAuthentication: AuthenticationLevel.END_USER,
+      requireAuthentication: AuthenticationLevel.ADMIN,
     },
     {
       path: '/newsletter',
@@ -42,7 +42,6 @@ const NewsletterRoutes: IControllerRoute = {
       metadata: {
         summary: 'Create newsletter',
       },
-      requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
       path: '/newsletter',

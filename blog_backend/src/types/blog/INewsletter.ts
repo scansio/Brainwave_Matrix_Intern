@@ -1,9 +1,8 @@
-import ITimestamp from "../ITimestamp"
-import ITag from "./ITag"
+import ITimestamp from '../ITimestamp'
 
 interface INewsletter extends ITimestamp {
   email: string
-  interestTagIds: ITag['_id'][]
+  interestTagIds: string[]
 }
 
 export default INewsletter

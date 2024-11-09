@@ -1,19 +1,19 @@
 {
-  "short_name": "Reblend App",
-  "name": "Create Reblend App Sample",
+  "short_name": "BlogNest",
+  "name": "BlogNest App",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "blognest.logo.transparent.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "blognest.logo.transparent.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "blognest.logo.background.webp",
       "type": "image/png",
       "sizes": "512x512"
     }

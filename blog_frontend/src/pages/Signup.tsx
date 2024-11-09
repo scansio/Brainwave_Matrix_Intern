@@ -60,12 +60,14 @@ function Signup() {
             <div class="flex-shrink-0 mb-14 lg:mb-0 lg:mr-10 lg:w-2/5">
               <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-                  <img
-                    class="mx-auto h-10 w-auto"
-                    src="/logo512.png"
-                    alt="Logo"
-                  />
-                  <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                  <Link href="/">
+                    <img
+                      class="mx-auto h-50 w-50"
+                      src="/blognest.logo.transparent.png"
+                      alt="Logo"
+                    />
+                  </Link>
+                  <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                     Sign up
                   </h2>
                 </div>

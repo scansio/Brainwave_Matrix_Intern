@@ -5,6 +5,7 @@ import { paginatingUrl } from "../../../scripts/misc";
 import { ALL_ARTICLE, BASE } from "../../../scripts/config/RestEndpoints";
 import { ACTIVE } from "../../../scripts/config/contants";
 import { toast } from "react-toastify";
+import { Link } from "reblend-router";
 
 function LatestArticles() {
   const [loading, setLoading] = useState(true);
@@ -17,6 +18,7 @@ function LatestArticles() {
         paginatingUrl(ALL_ARTICLE, {
           populate: ["author"],
           $sort: { "createdAt.date": -1 },
+          published: true,
           status: ACTIVE,
         })
       )
@@ -258,13 +260,12 @@ function LatestArticles() {
                 <h2 class="text-lg text-neutral-900 dark:text-neutral-100 font-semibold flex-grow">
                   💡 More tags
                 </h2>
-                <a
-                  class="flex-shrink-0 block text-primary-700 dark:text-primary-500 font-semibold text-sm"
-                  rel="noopener noreferrer"
-                  href="/"
+                <Link
+                  className="flex-shrink-0 block text-primary-700 dark:text-primary-500 font-semibold text-sm"
+                  href="/tag"
                 >
                   View all
-                </a>
+                </Link>
               </div>
               {/* <div class="flex flex-wrap p-4 xl:p-5" >
                 <a
@@ -475,13 +476,12 @@ function LatestArticles() {
                 <h2 class="text-lg text-neutral-900 dark:text-neutral-100 font-semibold flex-grow">
                   🎭 Discover Authors
                 </h2>
-                <a
-                  class="flex-shrink-0 block text-primary-700 dark:text-primary-500 font-semibold text-sm"
-                  rel="noopener noreferrer"
-                  href="/"
+                <Link
+                  className="flex-shrink-0 block text-primary-700 dark:text-primary-500 font-semibold text-sm"
+                  href="/publisher"
                 >
                   View all
-                </a>
+                </Link>
               </div>
               <div class="flow-root">
                 <div class="flex flex-col divide-y divide-neutral-200 dark:divide-neutral-700">

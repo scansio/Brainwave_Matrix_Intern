@@ -80,7 +80,7 @@ function Newsletter() {
                   ? "You have subscribed to our newletter"
                   : "Enter your email"
               }
-              onchange={setemail}
+              onChange={(e) => setemail(e.target.value)}
               disabled={subscribed || loading}
             />
             <button

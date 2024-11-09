@@ -8,7 +8,7 @@ function RelatedPostByTag() {
 
   return (
     <PageLayout>
-      <div class="container">
+      <div class="container my-10">
         <RelatedPost tag={params.tagName} />
       </div>
     </PageLayout>

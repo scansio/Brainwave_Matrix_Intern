@@ -1,4 +1,4 @@
-import Reblend, { SharedConfig } from "reblendjs";
+import Reblend, { SharedConfig, useEffect } from "reblendjs";
 import Router, { Route } from "reblend-router";
 import Notfound from "./pages/Notfound";
 import ErrorHandler from "./layouts/ErrorHandler";
@@ -7,13 +7,15 @@ import { UID } from "./scripts/config/contants";
 import { rand } from "./scripts/md5";
 
 function App() {
-  if (!SharedConfig.getLocalData(UID)) {
-    SharedConfig.setLocalData(
-      UID,
-      (crypto && crypto.randomUUID && crypto.randomUUID()) ||
-        rand(0x9988aac, 0xfffffff)
-    );
-  }
+  useEffect(() => {
+    if (!SharedConfig.getLocalData(UID)) {
+      SharedConfig.setLocalData(
+        UID,
+        (crypto && crypto.randomUUID && crypto.randomUUID()) ||
+          rand(0x9988aac, 0xfffffff)
+      );
+    }
+  }, []);
 
   return (
     <>

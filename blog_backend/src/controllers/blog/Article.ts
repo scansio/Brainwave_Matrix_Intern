@@ -95,22 +95,18 @@ class Article extends BaseController {
     this.status(true).statusCode(POST_SUCCESS).message('Article updated').data('update', update).send()
   }
 
-  async update({
-    id,
-    author,
-    slug,
-    content,
-    likeByIds,
-    title,
-    coverImageUrl,
-    tags,
-    seoDescription,
-    published,
-    numComments,
-    status,
-  }: any) {
+  async update() {
+    let coverImageUrl
+    if (this.req.headers['content-type']?.includes('multipart')) {
+      const filestore = new FileStore(this, true)
+      coverImageUrl = ((await filestore.uploadFor('coverImage')) as string) || ''
+    }
+
+    const { id, author, slug, content, title, tags, seoDescription, published, likeByIds, numComments, status } =
+      this.req.body || {}
+
     const definedValues = getDefinedValuesFrom({
-      author,
+      author: (author && (await this.adminAccess(false)) && author) || this.user._id,
       slug,
       content: content && sanitizeHTML(content),
       likeByIds,

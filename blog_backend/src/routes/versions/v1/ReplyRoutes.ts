@@ -19,7 +19,6 @@ const ReplyRoutes: IControllerRoute = {
       metadata: {
         summary: 'Get all replys',
       },
-      requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
       path: '/reply/like/:id([0-9a-fA-F]{24})',
@@ -50,7 +49,6 @@ const ReplyRoutes: IControllerRoute = {
       metadata: {
         summary: 'Get reply by id',
       },
-      requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
       path: '/reply',
@@ -66,7 +64,7 @@ const ReplyRoutes: IControllerRoute = {
       metadata: {
         summary: 'Update reply',
       },
-      requireAuthentication: AuthenticationLevel.ADMIN,
+      requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
       path: '/reply/:id([0-9a-fA-F]{24})',

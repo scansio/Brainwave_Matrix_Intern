@@ -9,9 +9,13 @@ import {
   Button,
   ButtonGroup,
   Col,
+  Container,
   Form,
   Image,
   InputGroup,
+  Modal,
+  ModalBody,
+  ModalHeader,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -27,25 +31,21 @@ import { paginatingUrl } from "../../scripts/misc";
 import { ACTIVE } from "../../scripts/config/contants";
 import CreateTag from "./CreateTag";
 import RichTextEditor from "./RichTextEditor";
+import Article from "../../pages/Article";
+import IArticle from "../Article/IArticle";
 
-function EditForm() {
+function EditForm({ data }: { data: IArticle | null }) {
   const dataIdRef = useRef("");
-  const params = useParams<{ articleSlug: string }>();
-
-  const data: {
-    slug: string;
-    content: string;
-    title: string;
-    coverImageUrl: string;
-    seoDescription: string;
-    tags: string[];
-    published: boolean;
-    _id: string;
-  } | null = SharedConfig.get("EditFormData");
 
   const [isUpdate, setIsUpdate] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [previewing, setPreviewing] = useState(false);
+
+  const [previewOfArticle, setPreviewOfArticle] = useState<
+    IArticle | undefined
+  >(undefined);
 
   const [slug, setslug] = useState("");
   const [content, setcontent] = useState("");
@@ -63,7 +63,7 @@ function EditForm() {
   const [status, setStatus] = useState(0);
 
   useEffect(() => {
-    if (data && params.articleSlug) {
+    if (data) {
       (dataIdRef.current as any) = data._id;
       setslug(data.slug);
       setcontent(data.content);
@@ -196,6 +196,7 @@ function EditForm() {
       fetchOptiondata.append("seoDescription", seoDescription);
       fetchOptiondata.append("tags", tags);
       fetchOptiondata.append("published", published);
+      fetchOptiondata.append("id", dataIdRef.current);
     } else {
       fetchOptiondata = {
         slug,
@@ -204,6 +205,7 @@ function EditForm() {
         seoDescription,
         tags,
         published,
+        id: dataIdRef.current,
       };
     }
 
@@ -212,6 +214,10 @@ function EditForm() {
       method: "PATCH",
       data: fetchOptiondata,
     };
+    coverImage &&
+      ((gdFetchOption as any).headers = {
+        "Content-Type": "multipart/form-data",
+      });
     let data;
     try {
       data = await fetcher.fetch(gdFetchOption);
@@ -226,6 +232,30 @@ function EditForm() {
       }
     }
     setSubmitting(false);
+  }
+
+  function preview(e: any) {
+    e?.preventDefault();
+    const previewOfArticleTemp: IArticle = {
+      _id: "6a09a90908f78d7f878ddafd",
+      readingTimeInMinute: 0,
+      slug,
+      coverImageUrl,
+      seoDescription,
+      title,
+      tags,
+      likeByIds: [],
+      numComments: 0,
+      author: SharedConfig.getLocalData("user"),
+      createdAt: {
+        dateString: new Date().toLocaleDateString(),
+      },
+      published,
+      content,
+    };
+
+    setPreviewOfArticle(previewOfArticleTemp);
+    setPreviewing(true);
   }
 
   return (
@@ -325,44 +355,6 @@ function EditForm() {
                   </Button>
                 </ButtonGroup>
               </Col>
-              <Col
-                className="p-1"
-                style={{
-                  display: "flex",
-                  alignItems: "stretch",
-                  justifyContent: "flex-start",
-                }}
-              >
-                <InputGroup style={{ margin: "2px" }}>
-                  <InputGroup.Text className="fw-bold">
-                    Published &nbsp;&nbsp;
-                    <Form.Switch
-                      checked={published}
-                      onChange={(e) => setpublished(!published)}
-                    />
-                  </InputGroup.Text>
-                </InputGroup>
-                <InputGroup style={{ margin: "2px" }}>
-                  <InputGroup.Text className="fw-bold">
-                    Status &nbsp;&nbsp;
-                    <Form.Switch
-                      checked={!!status}
-                      onChange={(e) => setStatus(status ? 0 : 1)}
-                    ></Form.Switch>
-                  </InputGroup.Text>
-                </InputGroup>
-                {submitting ? (
-                  <Spinner />
-                ) : (
-                  <Form.Control
-                    size="sm"
-                    type="submit"
-                    style={{ margin: "2px" }}
-                    value={`${isUpdate ? "Update" : "Create"}`}
-                    className="fw-bold utilityLink"
-                  />
-                )}
-              </Col>
             </Row>
           </Col>
           <Col xs={12} md={7} lg={7}>
@@ -376,7 +368,70 @@ function EditForm() {
             </Row>
           </Col>
         </Row>
+        <Container
+          className="p-1 pt-2"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "stretch",
+            flexWrap: "wrap",
+            alignItems: "stretch",
+          }}
+        >
+          <div>
+            <InputGroup style={{ margin: "5px" }}>
+              <InputGroup.Text className="fw-bold">
+                Published &nbsp;&nbsp;
+                <Form.Switch
+                  checked={published}
+                  onChange={(e) => setpublished(!published)}
+                />
+              </InputGroup.Text>
+            </InputGroup>
+          </div>
+          <div>
+            <InputGroup style={{ margin: "5px" }}>
+              <InputGroup.Text className="fw-bold">
+                Status &nbsp;&nbsp;
+                <Form.Switch
+                  checked={!!status}
+                  onChange={(e) => setStatus(status ? 0 : 1)}
+                />
+              </InputGroup.Text>
+            </InputGroup>
+          </div>
+          <div>
+            <InputGroup style={{ margin: "5px" }}>
+              {submitting ? (
+                <Spinner />
+              ) : (
+                <ButtonGroup>
+                  <Form.Control
+                    size="sm"
+                    type="submit"
+                    value={`${isUpdate ? "Update" : "Create"}`}
+                    className="fw-bold utilityLink"
+                  />
+                  <Button onClick={preview}>Preview</Button>
+                </ButtonGroup>
+              )}
+            </InputGroup>
+          </div>
+        </Container>
       </Form>
+      <Modal
+        show={previewing}
+        onHide={() => setPreviewing(false)}
+        size="lg"
+        fullscreen
+      >
+        <ModalHeader onHide={() => setPreviewing(false)} closeButton>
+          Preview of "{title}"
+        </ModalHeader>
+        <ModalBody>
+          <Article previewOfArticle={previewOfArticle} />
+        </ModalBody>
+      </Modal>
     </>
   );
 }

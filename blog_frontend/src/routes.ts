@@ -10,9 +10,9 @@ export const routes = {
   "/": Home,
   "/home": Home,
   "/article/:slug": Article,
-  "/tag/:tagName": RelatedPostByTag,
-  "/author/*": Author,
-  "/publisher/:slug": Publisher,
+  "/tag/:tagName?": RelatedPostByTag,
+  "/author*": Author,
+  "/publisher/:slug?": Publisher,
   "/login": Login,
   "/signup": Signup,
 };

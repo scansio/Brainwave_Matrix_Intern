@@ -19,12 +19,10 @@ import { ACTIVE, UID } from "../../../scripts/config/contants";
 function ReplyModal({
   openReplyModal,
   setOpenReplyModal,
-  setReloadingEffectTrigger,
   replyingComment,
 }: {
   openReplyModal: boolean;
   setOpenReplyModal: (val: boolean) => void;
-  setReloadingEffectTrigger: (val: boolean) => void;
   replyingComment: { _id: string; numComments: number; content: string } | null;
 }) {
   const [likingReply, setLikingReply] = useState(false);
@@ -117,7 +115,7 @@ function ReplyModal({
           ]);
           setContent("");
           replyingComment && replyingComment.numComments++;
-          setReloadingEffectTrigger(((prev: boolean) => !prev) as any);
+          //setReloadingEffectTrigger(((prev: boolean) => !prev) as any);
         }
         setLoading(false);
       })
@@ -163,12 +161,15 @@ function ReplyModal({
                   >
                     Submit
                   </button>
-                  {/* <button
-              class="nc-Button flex-shrink-0 relative h-auto inline-flex items-center justify-center rounded-full transition-colors border-transparent bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200 text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  "
-              type="button"
-            >
-              Cancel
-            </button> */}
+                  <button
+                    class="nc-Button flex-shrink-0 relative h-auto inline-flex items-center justify-center rounded-full transition-colors border-transparent bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200 text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  "
+                    type="button"
+                    onClick={() => {
+                      setOpenReplyModal(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </form>
             </div>
@@ -236,7 +237,11 @@ function ReplyModal({
                   }}
                   disabled={likingReply}
                 >
-                  <svg class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24">
+                  <svg
+                    class="h-5 w-5 mr-1"
+                    fill={reply.likeByIds?.includes(uid) ? "red" : "none"}
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       fill-rule="evenodd"
                       stroke="currentColor"

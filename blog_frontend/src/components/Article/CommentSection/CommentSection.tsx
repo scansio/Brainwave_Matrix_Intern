@@ -33,7 +33,6 @@ function CommentSection({
   const [likingComment, setLikingComment] = useState(false);
   const [likingArticle, setLikingArticle] = useState(false);
   const [openReplyModal, setOpenReplyModal] = useState(false);
-  const [, setReloadingEffectTrigger] = useState(false);
 
   let replyingComment: any = null;
 
@@ -43,6 +42,7 @@ function CommentSection({
       fetcher
         .fetch(
           paginatingUrl(ALL_COMMENT, {
+            articleId: article._id,
             populate: ["uid"],
             $sort: -1,
             status: ACTIVE,
@@ -78,7 +78,7 @@ function CommentSection({
       .then((data) => {
         if (data?.data?.status) {
           setComments((previousComments) => [
-            data?.data["created"],
+            data.data["created"],
             ...(previousComments || []),
           ]);
           setDiscussion("");
@@ -177,7 +177,6 @@ function CommentSection({
               {...{
                 openReplyModal,
                 setOpenReplyModal,
-                setReloadingEffectTrigger,
                 replyingComment,
               }}
             />
@@ -192,7 +191,7 @@ function CommentSection({
                 required
                 value={discussion}
                 onchange={(e: any) => setDiscussion(e.target.value)}
-              ></textarea>
+              />
               <div class="my-2 space-x-3">
                 <button
                   class="nc-Button flex-shrink-0 relative h-auto inline-flex items-center justify-center rounded-full transition-colors border-transparent bg-primary-700 hover:bg-primary-6000 text-primary-50 text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  "
@@ -213,20 +212,23 @@ function CommentSection({
             <ul class="nc-SingleCommentLists space-y-5">
               {comments?.map((comment) => {
                 return (
-                  <li>
+                  <li key={comment._id}>
                     <div class="nc-CommentCard flex ">
-                      {/* <div
-              class="wil-avatar relative flex-shrink-0 inline-flex items-center justify-center overflow-hidden text-neutral-100 uppercase font-semibold shadow-inner rounded-full h-6 w-6 text-base sm:text-lg sm:h-8 sm:w-8 mt-4"
-              style=""
-            >
-              <img
-                sizes="100px"
-                src="/static/media/8.ce5f252ae5871de13c94.jpg"
-                class="absolute inset-0 w-full h-full object-cover object-cover absolute inset-0 w-full h-full"
-                alt="John Doe"
-              />
-              <span class="wil-avatar__name">J</span>
-            </div> */}
+                      <div
+                        class="wil-avatar relative flex-shrink-0 inline-flex items-center justify-center overflow-hidden text-neutral-100 uppercase font-semibold shadow-inner rounded-full h-6 w-6 text-base sm:text-lg sm:h-8 sm:w-8 mt-4"
+                        style=""
+                      >
+                        <img
+                          sizes="100px"
+                          src={
+                            comment.uid?.avatar ||
+                            "/static/media/8.ce5f252ae5871de13c94.jpg"
+                          }
+                          class="absolute inset-0 w-full h-full object-cover object-cover absolute inset-0 w-full h-full"
+                          alt="John Doe"
+                        />
+                        <span class="wil-avatar__name">J</span>
+                      </div>
                       <div class="flex-grow flex flex-col p-4 ml-2 text-sm border border-neutral-200 rounded-xl sm:ml-3 sm:text-base dark:border-neutral-700">
                         <div class="relative flex items-center pr-6">
                           <div class="absolute -right-3 -top-3">
@@ -289,7 +291,11 @@ function CommentSection({
                           >
                             <svg
                               class="h-5 w-5 mr-1"
-                              fill="none"
+                              fill={
+                                comment.likeByIds?.includes(uid)
+                                  ? "red"
+                                  : "none"
+                              }
                               viewBox="0 0 24 24"
                             >
                               <path
@@ -329,9 +335,6 @@ function CommentSection({
                                 d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
                               ></path>
                             </svg>
-                            <span class="text-xs leading-none text-neutral-900 dark:text-neutral-200">
-                              Reply
-                            </span>{" "}
                             <span>{comment?.numReplys}</span>
                           </button>
                         </div>
@@ -424,7 +427,10 @@ function CommentSection({
                 </span>
               </a>
               <div class="border-l h-4 border-neutral-200 dark:border-neutral-700"></div>
-              <button class="w-9 h-9 items-center justify-center bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 rounded-full flex">
+              <button
+                class="w-9 h-9 items-center justify-center bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 rounded-full flex"
+                onClick={() => window.scrollTo(0, 0)}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"

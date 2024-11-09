@@ -5,6 +5,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
+  ModalHeader,
 } from "react-bootstrap";
 import {
   ALL_ARTICLE,
@@ -16,12 +17,15 @@ import { toast } from "react-toastify";
 import { HOTLIST } from "../../scripts/config/contants";
 import PaginatedTable from "../paginating/PaginatedTable";
 import { Link, redirectTo } from "reblend-router";
+import EditForm from "./EditForm";
 
 function AuthorHome() {
   const [reload, setReload] = useState(false);
   const [itemId, setItemId] = useState("");
   const [showConfirmDeletion, setShowConfirmDeletion] = useState(false);
   const [deletingArticle, setDeletingArticle] = useState(false);
+  const [openEditingForm, setOpenEditingForm] = useState(false);
+  const [editFormData, setEditFormData] = useState(null);
 
   const urlRef = useRef(ALL_ARTICLE);
 
@@ -47,8 +51,8 @@ function AuthorHome() {
           title="Edit this article"
           variant="warning"
           onClick={() => {
-            SharedConfig.set("EditFormData", articleRow);
-            redirectTo("/author/edit/" + articleRow.slug);
+            setEditFormData(articleRow);
+            setOpenEditingForm(true);
           }}
         >
           <i className="fas fa-edit">Edit</i>
@@ -59,9 +63,15 @@ function AuthorHome() {
 
   const createArticleButton = () => {
     return (
-      <Link href={"/author/edit/"}>
-        <Button style={{ padding: "5px", fontSize: "11px" }}>Add</Button>
-      </Link>
+      <Button
+        style={{ padding: "5px", fontSize: "11px" }}
+        onClick={() => {
+          setEditFormData(null);
+          setOpenEditingForm(true);
+        }}
+      >
+        Add
+      </Button>
     );
   };
 
@@ -70,7 +80,9 @@ function AuthorHome() {
       name: "Cover",
       type: String,
       transform: {
-        out: (rowData: any) => <img src={BASE + rowData.coverImageUrl} alt="Cover" />,
+        out: (rowData: any) => (
+          <img src={BASE + rowData.coverImageUrl} alt="Cover" />
+        ),
       },
       virtual: true,
     },
@@ -167,6 +179,24 @@ function AuthorHome() {
 
   return (
     <>
+      <Modal
+        show={openEditingForm}
+        onHide={() => setOpenEditingForm(false)}
+        fullscreen
+        animation
+      >
+        <ModalHeader closeButton onHide={() => setOpenEditingForm(false)}>
+          <h3 class="text-bold">
+            {editFormData
+              ? `Editing "${(editFormData as any).title}"`
+              : "Creative writing"}
+          </h3>
+        </ModalHeader>
+        <ModalBody className="pt-10">
+          {openEditingForm ? <EditForm data={editFormData as any} /> : null}
+        </ModalBody>
+      </Modal>
+
       <Modal
         show={showConfirmDeletion}
         onHide={() => setShowConfirmDeletion(false)}

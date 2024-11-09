@@ -1,4 +1,4 @@
-import Reblend, { IAny, SharedConfig, useEffect, useState } from "reblendjs";
+import Reblend, { SharedConfig, useEffect, useState } from "reblendjs";
 import PageLayout from "../layouts/PageLayout";
 import ArticleHeading from "../components/Article/ArticleHeading";
 import WrittenBy from "../components/Article/WrittenBy";
@@ -14,10 +14,13 @@ import { Card, Placeholder } from "react-bootstrap";
 import { ARTICLE_SLUG, ARTICLE_READ } from "../scripts/config/RestEndpoints";
 import { toast } from "react-toastify";
 import { UID } from "../scripts/config/contants";
+import IArticle from "../components/Article/IArticle";
 
-function Article() {
+function Article({ previewOfArticle }: { previewOfArticle?: IArticle }) {
   const params = useParams<{ slug: string }>();
-  const [article, setArticle] = useState<IAny | null>(null);
+  const [article, setArticle] = useState<IArticle | null>(
+    previewOfArticle || null
+  );
   const [articleNotfound, setArticleNotfound] = useState(false);
   const [loadingArticle, setLoadingArticle] = useState(true);
   const [, setArticleReloadingEffectTrigger] = useState(false);
@@ -41,7 +44,7 @@ function Article() {
   };
 
   useEffect(() => {
-    if (params.slug) {
+    if (!previewOfArticle && params.slug) {
       setLoadingArticle(true);
       fetcher
         .fetch(ARTICLE_SLUG + params.slug)
@@ -59,6 +62,8 @@ function Article() {
           toast.error(e.message || "Could not load article");
           setLoadingArticle(false);
         });
+    } else {
+      setLoadingArticle(false);
     }
 
     return () => {
@@ -66,7 +71,7 @@ function Article() {
       window.removeEventListener("scroll", handleScroll);
     };
     // eslint-disable-next-line reblend-hooks/exhaustive-deps
-  }, [params.slug]);
+  }, [params.slug, previewOfArticle]);
 
   useEffect(() => {
     if (
@@ -100,42 +105,12 @@ function Article() {
     }
   }, [minuteSpend, article, readToend, submittedRead]);
 
-  return !params.slug || articleNotfound ? (
-    <Notfound />
-  ) : (
-    <PageLayout>
-      <div>
-        <ArticleHeading article={article} />
-        <div class="container mt-10">
-          <div class="relative">
-            <div class="nc-SingleContent space-y-10">
-              {loadingArticle ? (
-                <Placeholder as={Card.Text} animation="glow">
-                  <Placeholder xs={7} />
-                  <Placeholder xs={4} />
-                  <Placeholder xs={4} />
-                  <Placeholder xs={6} />
-                  <Placeholder xs={8} />
-                </Placeholder>
-              ) : (
-                <>
-                  <ArticleBlock article={article!} />
-                  <TagSection />
-                  <div class="max-w-screen-md mx-auto border-b border-t border-neutral-100 dark:border-neutral-700"></div>
-                  <WrittenBy author={article?.author} />
-                  <CommentSection
-                    article={article as any}
-                    setArticleReloadingEffectTrigger={
-                      setArticleReloadingEffectTrigger
-                    }
-                  />
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-        <div class="relative bg-neutral-100 dark:bg-neutral-800 py-16 lg:py-28 mt-16 lg:mt-28">
-          <div class="container">
+  const readingView = () => (
+    <div>
+      <ArticleHeading article={article} />
+      <div class="container mt-10">
+        <div class="relative">
+          <div class="nc-SingleContent space-y-10">
             {loadingArticle ? (
               <Placeholder as={Card.Text} animation="glow">
                 <Placeholder xs={7} />
@@ -146,14 +121,54 @@ function Article() {
               </Placeholder>
             ) : (
               <>
-                <RelatedPost tag={article?.tag} exludeArticleId={article?._id} />
-                <MoreFromAuthor exludeArticleId={article?._id}/>
+                <ArticleBlock article={article!} />
+                <TagSection />
+                <div class="max-w-screen-md mx-auto border-b border-t border-neutral-100 dark:border-neutral-700"></div>
+                <WrittenBy author={article?.author!} />
+                <CommentSection
+                  article={article as any}
+                  setArticleReloadingEffectTrigger={
+                    setArticleReloadingEffectTrigger
+                  }
+                />
               </>
             )}
           </div>
         </div>
       </div>
-    </PageLayout>
+      <div class="relative bg-neutral-100 dark:bg-neutral-800 py-16 lg:py-28 mt-16 lg:mt-28">
+        <div class="container">
+          {loadingArticle ? (
+            <Placeholder as={Card.Text} animation="glow">
+              <Placeholder xs={7} />
+              <Placeholder xs={4} />
+              <Placeholder xs={4} />
+              <Placeholder xs={6} />
+              <Placeholder xs={8} />
+            </Placeholder>
+          ) : (
+            <>
+              <RelatedPost
+                tag={article?.tags!}
+                exludeArticleId={article?._id}
+              />
+              <MoreFromAuthor
+                exludeArticleId={article?._id}
+                uid={article?.author?._id!}
+              />
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  return !(previewOfArticle || params.slug) || articleNotfound ? (
+    <Notfound />
+  ) : previewOfArticle ? (
+    readingView()
+  ) : (
+    <PageLayout>{readingView()}</PageLayout>
   );
 }
 

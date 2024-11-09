@@ -1,4 +1,4 @@
-import { Spinner } from "react-bootstrap";
+import { Button, Container, Spinner } from "react-bootstrap";
 import Reblend, { useEffect, useState } from "reblendjs";
 import TextArea from "./TextArea";
 
@@ -11,89 +11,58 @@ function RichTextEditor({
 }) {
   const [loading, setLoading] = useState(true);
   const [loadingError, setLoadingError] = useState("");
+  const [trigger, setTrigger] = useState(false);
   const textArea = new TextArea();
 
   let round = 0;
+  let intervalId: any;
 
-  const intervalId = setInterval(() => {
-    if ((window as any).$) {
-      if ($("#summernote") && ($("#summernote") as any).summernote) {
-        textArea.setOnChangeListener(setcontent);
-        ($("#summernote") as any).summernote({
-          placeholder: "Write your article here ...",
-          /* tabsize: 2, */
-          width: "100%",
-          height: "500" /* 
-          toolbar: [
-            ["style", ["style"]],
-            ["font", ["bold", "underline", "clear"]],
-            ["color", ["color"]],
-            ["para", ["ul", "ol", "paragraph"]],
-            ["table", ["table"]],
-            ["insert", ["link", "picture", "video"]],
-            ["view", ["fullscreen", "codeview", "help"]],
-          ],
-          fontNames: [
-            "Arial",
-            "Arial Black",
-            "Comic Sans MS",
-            "Courier New",
-            "Merriweather",
-            ...[
-              "Arial",
-              "Arial Black",
-              "Comic Sans MS",
-              "Courier New",
-              "Helvetica Neue",
-              "Helvetica",
-              "Impact",
-              "Lucida Grande",
-              "Tahoma",
-              "Times New Roman",
-              "Verdana",
-            ],
-          ],
-          lineHeights: [
-            "0.2",
-            "0.3",
-            "0.4",
-            "0.5",
-            "0.6",
-            "0.8",
-            "1.0",
-            "1.2",
-            "1.4",
-            "1.5",
-            "2.0",
-            "3.0",
-          ], */,
-          /* codeviewFilter: false,
-          codeviewIframeFilter: true, 
-          content,*/
-        });
-        content && ($("#summernote") as any).summernote("pasteHTML", content);
-        clearInterval(intervalId);
-        setLoading(false);
-      }
-    } else {
-      if (round >= 4) {
-        clearInterval(intervalId);
-        setLoadingError("Could not load editor please reload this page");
-        setLoading(false);
+  const intervalStarter = () => {
+    setLoading(true);
+    setLoadingError("");
+    intervalId = setInterval(() => {
+      if ((window as any).$) {
+        if ($("#summernote") && ($("#summernote") as any).summernote) {
+          try {
+            textArea.setOnChangeListener(setcontent);
+            ($("#summernote") as any).summernote({
+              placeholder: "Write your article here ...",
+              width: "100%",
+              height: "400",
+            });
+            content &&
+              ($("#summernote") as any).summernote("pasteHTML", content);
+          } catch (error) {
+            setLoadingError("Could not load editor please reload this page");
+          } finally {
+            clearInterval(intervalId);
+            setLoading(false);
+          }
+        }
       } else {
-        round++;
+        if (round >= 4) {
+          clearInterval(intervalId);
+          setLoadingError("Could not load editor please reload this page");
+          setLoading(false);
+        } else {
+          round++;
+        }
       }
-    }
-  }, 500);
+    }, 500);
+  };
+
+  intervalStarter();
 
   useEffect(() => {
+    clearInterval(intervalId);
+    intervalStarter();
     return () => {
       if ($ && $("#summernote") && ($("#summernote") as any).summernote) {
         ($("#summernote") as any).summernote("destroy");
       }
       clearInterval(intervalId);
     };
-  }, []);
+  }, [trigger]);
 
   return (
     <>
@@ -117,10 +86,18 @@ function RichTextEditor({
       {textArea}
       {loading ? (
         <div>
-          Initiating editor please wait... <Spinner />
+          Initiating editor please wait...{" "}
+          <span>
+            <Spinner />
+          </span>
         </div>
       ) : loadingError ? (
-        <div>{loadingError}</div>
+        <div>
+          {loadingError} {"  "}
+          <Button onClick={() => setTrigger((prev) => !prev)}>
+            Reload editor
+          </Button>
+        </div>
       ) : null}
     </>
   );

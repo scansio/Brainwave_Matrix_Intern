@@ -19,7 +19,6 @@ const CommentRoutes: IControllerRoute = {
       metadata: {
         summary: 'Get all comments',
       },
-      requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
       path: '/comment/like/:id([0-9a-fA-F]{24})',
@@ -50,7 +49,6 @@ const CommentRoutes: IControllerRoute = {
       metadata: {
         summary: 'Get comment by id',
       },
-      requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
       path: '/comment',
@@ -66,7 +64,7 @@ const CommentRoutes: IControllerRoute = {
       metadata: {
         summary: 'Update comment',
       },
-      requireAuthentication: AuthenticationLevel.ADMIN,
+      requireAuthentication: AuthenticationLevel.END_USER,
     },
     {
       path: '/comment/:id([0-9a-fA-F]{24})',

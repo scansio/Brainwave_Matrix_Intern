@@ -1,19 +1,21 @@
-import Reblend, { SharedConfig, useEffect, useState } from "reblendjs";
-import { ACTIVE, UID } from "../../../scripts/config/contants";
+import Reblend, { useEffect, useState } from "reblendjs";
+import { ACTIVE } from "../../../scripts/config/contants";
 import fetcher from "../../../scripts/SharedFetcher";
 import { paginatingUrl } from "../../../scripts/misc";
 import { ALL_ARTICLE, BASE } from "../../../scripts/config/RestEndpoints";
 import { toast } from "react-toastify";
 import { Card, Placeholder } from "react-bootstrap";
+import IArticle from "../IArticle";
 
 function MoreFromAuthor({
   exludeArticleId,
+  uid,
 }: {
   exludeArticleId?: string | null;
+  uid: number;
 }) {
-  const uid = SharedConfig.getLocalData(UID);
   const [loading, setLoading] = useState(true);
-  const [articles, setArticles] = useState<any[]>([]);
+  const [articles, setArticles] = useState<IArticle[]>([]);
 
   useEffect(() => {
     setLoading(true);
@@ -23,6 +25,7 @@ function MoreFromAuthor({
           author: uid,
           populate: ["author"],
           status: ACTIVE,
+          published: true,
         })
       )
       .then((data) => {
@@ -68,7 +71,12 @@ function MoreFromAuthor({
                     title="Liked"
                     href={"/article/" + article.slug}
                   >
-                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <svg
+                      width="24"
+                      height="24"
+                      fill={article.likeByIds?.includes(uid) ? "red" : "none"}
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         fill-rule="evenodd"
                         stroke="currentColor"
@@ -116,7 +124,7 @@ function MoreFromAuthor({
                       ></path>
                     </svg>
                     <span class="ml-1 text-neutral-900 dark:text-neutral-200">
-                      {article?.numReplys}
+                      {article?.numComments}
                     </span>
                   </a>
                 </div>
@@ -159,7 +167,7 @@ function MoreFromAuthor({
                       class="nc-PostTypeFeaturedIcon z-20 hover:scale-105 transform cursor-pointer transition-transform"
                       data-nc-id="PostTypeFeaturedIcon"
                     >
-                      <span class="bg-neutral-900 bg-opacity-60 rounded-full flex  items-center justify-center text-xl text-white border border-white w-11 h-11">
+                      {/* <span class="bg-neutral-900 bg-opacity-60 rounded-full flex  items-center justify-center text-xl text-white border border-white w-11 h-11">
                         <svg
                           class="w-6 h-6"
                           viewBox="0 0 24 24"
@@ -202,7 +210,7 @@ function MoreFromAuthor({
                             stroke-linejoin="round"
                           ></path>
                         </svg>
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                   <a
@@ -247,10 +255,10 @@ function MoreFromAuthor({
                     </h2>
                     <a
                       class="flex mt-2.5 relative"
-                      href={"/publisher/" + article.uid?.slug}
+                      href={"/publisher/" + article.author?.slug}
                     >
                       <span class="block text-neutral-200 hover:text-white font-medium truncate">
-                        {article.uid?.firstname} {article.uid?.lastname}
+                        {article.author?.firstname} {article.author?.lastname}
                       </span>
                       <span class="mx-[6px] font-medium">·</span>
                       <span class="font-normal truncate">

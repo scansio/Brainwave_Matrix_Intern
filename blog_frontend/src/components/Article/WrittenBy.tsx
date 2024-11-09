@@ -1,11 +1,10 @@
 import { Link } from "reblend-router";
-import Reblend, {  } from "reblendjs";
+import Reblend from "reblendjs";
 
 function WrittenBy({
   author,
 }: {
   author: null | {
-    _id: string;
     firstname: string;
     lastname: string;
     bio: string;

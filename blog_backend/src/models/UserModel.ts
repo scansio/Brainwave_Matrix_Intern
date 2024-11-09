@@ -43,7 +43,7 @@ export const UserSchema = new Schema<IUser>({
   password: {
     type: String,
     trim: true,
-    required: [true, "Password is required"],
+    required: [true, 'Password is required'],
     set: (password: string) => password && md5(`${password}`),
   },
   pin: {
@@ -62,8 +62,8 @@ export const UserSchema = new Schema<IUser>({
     default: AuthenticationLevel.END_USER,
   },
   dob: Date,
-  phone: { type: Number, minLength: 7, maxLength: 10/* , required: true */ },
-  slug: String,
+  phone: { type: Number, minLength: 7, maxLength: 10 /* , required: true */ },
+  slug: { type: String, unique: true },
   bio: String,
   avatar: String,
 })

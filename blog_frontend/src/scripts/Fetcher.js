@@ -4,12 +4,15 @@ import { API_VERSION, BASE } from "./config/RestEndpoints";
 import axios from "axios";
 import { SharedConfig, useContext } from "reblendjs";
 import { authTokenContext } from "../context";
+import { redirectTo } from "reblend-router";
+import { toast } from "react-toastify";
+import { TO_VISIT_URL_KEY } from "./config/contants";
 
 class Fetcher {
   static RETURN_JSON_OBJECT = 2;
   static RETURN_RESPONSE_OBJECT = 1;
   static RETURN_BLOB = 3;
-  auth = ''
+  auth = "";
 
   constructor(url = "", addVersion = true) {
     this.base_url = url || (addVersion ? `${BASE}/${API_VERSION}` : `${BASE}`);
@@ -17,7 +20,7 @@ class Fetcher {
     this.frequency = 30000;
     this.FAIL_SAFE_THRESHOLD = 500;
     const [auth] = useContext.bind(this)(authTokenContext, "auth");
-    this.auth = auth
+    this.auth = auth;
   }
 
   addListenerForUrl(
@@ -129,7 +132,9 @@ class Fetcher {
     }
     const data = res?.data;
     if (data?.connection?.statusCode === 401) {
-      SharedConfig.destroySessionData();
+      SharedConfig.setFlashData(TO_VISIT_URL_KEY, window.location.pathname);
+      toast.error("Please login");
+      redirectTo("/login");
     }
     return returnType === Fetcher.RETURN_RESPONSE_OBJECT || !data ? res : data;
   }

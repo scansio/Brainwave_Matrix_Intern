@@ -5,6 +5,7 @@ import { paginatingUrl } from "../../../scripts/misc";
 import { ALL_ARTICLE, BASE } from "../../../scripts/config/RestEndpoints";
 import { ACTIVE } from "../../../scripts/config/contants";
 import { Card, Placeholder } from "react-bootstrap";
+import IArticle from "../IArticle";
 
 function RelatedPost({
   tag,
@@ -14,37 +15,16 @@ function RelatedPost({
   tag: string | string[];
 }) {
   const [loading, setLoading] = useState(true);
-  const [articles, setArticles] = useState<
-    {
-      slug: string;
-      coverImageUrl: string;
-      seoDescription: string;
-      title: string;
-      tags: string[];
-      likeByIds: number[];
-      numComments: number;
-      author: {
-        firstname: string;
-        lastname: string;
-        slug: string;
-        avatar: string;
-      };
-      createdAt: {
-        dateString: string;
-      };
-    }[]
-  >([]);
+  const [articles, setArticles] = useState<IArticle[]>([]);
 
   useEffect(() => {
-    if (!tag) {
-      return;
-    }
     setLoading(true);
     fetcher
       .fetch(
         paginatingUrl(ALL_ARTICLE, {
-          tags: { $all: Array.isArray(tag) ? tag : [tag] },
+          ...(!tag ? {} : { tags: { $all: Array.isArray(tag) ? tag : [tag] } }),
           populate: ["author"],
+          published: true,
           status: ACTIVE,
         })
       )

@@ -1,8 +1,9 @@
 import { Card, Placeholder } from "react-bootstrap";
-import Reblend, { IAny } from "reblendjs";
+import Reblend from "reblendjs";
 import { BASE } from "../../scripts/config/RestEndpoints";
+import IArticle from "./IArticle";
 
-function ArticleHeading({ article }: { article: IAny | null }) {
+function ArticleHeading({ article }: { article: IArticle | null }) {
   return (
     <div class="nc-PageSingle pt-8 lg:pt-16">
       <header class="container rounded-xl">
