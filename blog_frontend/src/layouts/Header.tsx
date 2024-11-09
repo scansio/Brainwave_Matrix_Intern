@@ -1,5 +1,5 @@
 import { Modal, ModalBody, ModalHeader } from "react-bootstrap";
-import { Link } from "reblend-router";
+import { Link, useLocation } from "reblend-router";
 import Reblend, {
   SharedConfig,
   useContext,
@@ -15,6 +15,8 @@ function Header() {
   const [showHeader, setShowHeader] = useReducer((prev) => {
     return !prev;
   }, false);
+
+  const location = useLocation();
 
   const tags: null | string[] = SharedConfig.get("TAGS");
 
@@ -92,7 +94,13 @@ function Header() {
                     id="headlessui-popover-button-:r0:"
                   >
                     <Link
-                      className="inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                      className={`inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 ${
+                        (location?.pathname?.startsWith("/") &&
+                          location?.pathname?.length === 1) ||
+                        location?.pathname?.startsWith("/home")
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
                       href="/"
                     >
                       Homes
@@ -161,7 +169,11 @@ function Header() {
                     id="headlessui-popover-button-:r4:"
                   >
                     <Link
-                      className="inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                      className={`inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 ${
+                        location?.pathname?.startsWith("/tag")
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
                       href="/tag"
                     >
                       Tag
@@ -179,8 +191,12 @@ function Header() {
                     id="headlessui-popover-button-:r4:"
                   >
                     <Link
-                      className="inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                      href="/Author"
+                      className={`inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 ${
+                        location?.pathname?.startsWith("/author")
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
+                      href="/author"
                     >
                       Author
                     </Link>
@@ -197,7 +213,11 @@ function Header() {
                     id="headlessui-popover-button-:r4:"
                   >
                     <Link
-                      className="inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                      className={`inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 ${
+                        location?.pathname?.startsWith("/publisher")
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
                       href="/publisher/"
                     >
                       Publisher's
@@ -217,7 +237,11 @@ function Header() {
                         id="headlessui-popover-button-:r4:"
                       >
                         <Link
-                          className="inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                          className={`inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 ${
+                            location?.pathname?.startsWith("/login")
+                              ? "bg-primary text-white"
+                              : ""
+                          }`}
                           href="/login"
                         >
                           Login
@@ -235,7 +259,11 @@ function Header() {
                         id="headlessui-popover-button-:r4:"
                       >
                         <Link
-                          className="inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                          className={`inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 ${
+                            location?.pathname?.startsWith("/signup")
+                              ? "bg-primary text-white"
+                              : ""
+                          }`}
                           href="/signup"
                         >
                           Signup

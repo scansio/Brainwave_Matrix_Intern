@@ -3,7 +3,7 @@ import md5, { rand } from "./md5";
 import { API_VERSION, BASE } from "./config/RestEndpoints";
 import axios from "axios";
 import { SharedConfig, useContext } from "reblendjs";
-import { authTokenContext } from "../context";
+import { authTokenContext, netErrContext } from "../context";
 import { redirectTo } from "reblend-router";
 import { toast } from "react-toastify";
 import { TO_VISIT_URL_KEY } from "./config/contants";
@@ -125,6 +125,9 @@ class Fetcher {
     try {
       res = await axios(options);
     } catch (error) {
+      if (error?.code === "ERR_NETWORK") {
+        netErrContext.update(true);
+      }
       if (!error?.response?.data) {
         throw new Error(error.message);
       }

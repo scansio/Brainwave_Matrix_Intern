@@ -7,3 +7,5 @@ export const authTokenContext = createContext("", {
 });
 
 export const showLoginContext = createContext(false);
+
+export const netErrContext = createContext(false)
