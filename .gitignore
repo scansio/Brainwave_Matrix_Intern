@@ -4,3 +4,4 @@
 *log
 blog_backend/cdn/file_store/*
 blog_backend/dist/*
+.vercel
