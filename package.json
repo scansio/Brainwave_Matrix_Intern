@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "build:admin": "cd blog_admin_frontend && npm run build",
-    "build:frontend": "cd blog_admin_frontend && npm run build",
-    "build:backend": "cd blog_admin_frontend && npm run build",
+    "build:frontend": "cd blog_frontend && npm run build",
+    "build:backend": "cd blog_backend && npm run build",
     "build": " npm run build:admin; npm run build:frontend; npm run build:backend;"
   },
   "repository": {
