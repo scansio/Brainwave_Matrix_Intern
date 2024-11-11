@@ -54,7 +54,7 @@ const common_1 = require("./common");
             stdio: ['ignore', out, err], // Ignore stdin, and direct stdout and stderr to the log files
         });
         // Allow the parent to exit while the child continues running
-        //child.unref();
+        child.unref();
     };
     const found = serverName && servers.find((serverConfig) => serverName === serverConfig.name);
     if (found) {

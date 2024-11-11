@@ -116,10 +116,10 @@ class User extends BaseController_1.default {
             this.status(false).statusCode(statusCodeConstants_1.NOTFOUND).message('User not found').send();
         else {
             const details = {
-                ...user?._doc,
                 state,
                 country,
-                ...userProfile?._doc,
+                ...(userProfile?._doc || {}),
+                ...(user?._doc || {}),
             };
             this.status(true).statusCode(statusCodeConstants_1.GET_SUCCESS).data('user', details).send();
         }

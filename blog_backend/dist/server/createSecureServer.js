@@ -90,7 +90,7 @@ function createSecureServer({ app, router, serverName, scheme, port, }) {
             const temp = {
                 path: `/${config.scheme}`,
                 handler: (0, http_proxy_middleware_1.createProxyMiddleware)({
-                    target: `${protocol}://localhost:${config.port}`, // The target server (CDN server)
+                    target: `${protocol}://${ip}:${config.port}`, // The target server (CDN server)
                     changeOrigin: true, // Changes the origin of the host header to the target URL
                     pathRewrite: { [`^/${scheme}/${config.scheme}`]: '' }, // Rewrites the path to remove '/main/cdn'
                     logger: Logger_1.default, // Logs for debugging; remove or set to 'error' in production
