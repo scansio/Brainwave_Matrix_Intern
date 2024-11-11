@@ -286,7 +286,12 @@ function ArticleHeading({ article }: { article: IArticle | null }) {
           </Placeholder>
         ) : (
           <img
-            src={BASE + article.coverImageUrl}
+            src={
+              article.coverImageUrl?.startsWith("base:") ||
+              article.coverImageUrl?.startsWith("blob:")
+                ? article.coverImageUrl
+                : BASE + article.coverImageUrl
+            }
             width="1260"
             height="750"
             alt="single"

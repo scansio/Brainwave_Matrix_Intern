@@ -56,10 +56,10 @@ export const statusTransform = {
     return sst.includes("success")
       ? ACTIVE
       : sst.includes("suspend")
-        ? SUSPENDED
-        : sst.includes("pending")
-          ? PENDING_APPROVAL
-          : INACTIVE;
+      ? SUSPENDED
+      : sst.includes("pending")
+      ? PENDING_APPROVAL
+      : INACTIVE;
   },
 };
 
@@ -414,134 +414,140 @@ function PaginatedTable(props) {
         innerHTML={`th {text-transform: capitalize !important;} td, th {padding-left: 5px !important; padding-right: 5px !important;}`}
       />
       {props.noControl ? null : (
-        <Form onSubmit={(e) => querySetter(e)}>
-          <Row>
-            <Col sm="12" md="6" lg="6">
-              <Row>
-                <Col
-                  sm={isSelectedANumber() ? "8" : "12"}
-                  md={isSelectedANumber() ? "8" : "12"}
-                  lg={isSelectedANumber() ? "8" : "12"}
-                  className="p-1"
-                >
-                  <InputGroup>
-                    <Form.Select
-                      onChange={(e) => setSearchKey(e.target.value.trim())}
-                      value={searchKey || props.primaryKey || ""}
-                    >
-                      {fieldKeys.map((field, i) =>
-                        fieldValues[i].hideFromSearch ||
-                        fieldValues[i].virtual ? null : (
-                          <option value={field} key={field}>
-                            {fieldValues[i].name}
-                          </option>
-                        )
-                      )}
-                    </Form.Select>
-                    <InputGroup.Text>
-                      <OverlayTrigger
-                        overlay={sortTip}
-                        placement="auto"
-                        trigger={"manual"}
-                        show={showSortTip}
-                        flip
+        <>
+          <Form onSubmit={(e) => querySetter(e)}>
+            <Row>
+              <Col sm="12" md="6" lg="6">
+                <Row>
+                  <Col
+                    sm={isSelectedANumber() ? "8" : "12"}
+                    md={isSelectedANumber() ? "8" : "12"}
+                    lg={isSelectedANumber() ? "8" : "12"}
+                    className="p-1"
+                  >
+                    <InputGroup>
+                      <Form.Select
+                        onChange={(e) => setSearchKey(e.target.value.trim())}
+                        value={searchKey || props.primaryKey || ""}
                       >
-                        <i
-                          className="fas fa-sort c-pointer"
-                          onClick={() => setShowSortTip(!showSortTip)}
-                          style={
-                            showSortTip
-                              ? {
-                                  backgroundColor: "blue",
-                                  borderRadius: "10px",
-                                  padding: "4px",
-                                }
-                              : {
-                                  backgroundColor: "initial",
-                                  borderRadius: "initial",
-                                  padding: "initial",
-                                }
-                          }
-                        ></i>
-                      </OverlayTrigger>
-                      <style>
-                        {`
+                        {fieldKeys.map((field, i) =>
+                          fieldValues[i].hideFromSearch ||
+                          fieldValues[i].virtual ? null : (
+                            <option value={field} key={field}>
+                              {fieldValues[i].name}
+                            </option>
+                          )
+                        )}
+                      </Form.Select>
+                      <InputGroup.Text>
+                        <OverlayTrigger
+                          overlay={sortTip}
+                          placement="auto"
+                          trigger={"manual"}
+                          show={showSortTip}
+                          flip
+                        >
+                          <i
+                            className="fas fa-sort c-pointer"
+                            onClick={() => setShowSortTip(!showSortTip)}
+                            style={
+                              showSortTip
+                                ? {
+                                    backgroundColor: "blue",
+                                    borderRadius: "10px",
+                                    padding: "4px",
+                                  }
+                                : {
+                                    backgroundColor: "initial",
+                                    borderRadius: "initial",
+                                    padding: "initial",
+                                  }
+                            }
+                          ></i>
+                        </OverlayTrigger>
+                        <style>
+                          {`
                       .tooltip-inner {
                         max-width: 100vw;
                         /* background-color: transparent */
                       }`}
-                      </style>
-                    </InputGroup.Text>
-                    <InputGroup.Text>
-                      <i
-                        className="fas fa-refresh c-pointer"
-                        onClick={() => querySetter()}
-                      ></i>
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Col>
-                {isSelectedANumber() ? (
-                  <Col sm="4" md="4" lg="4" className="p-1">
-                    <Form.Select
-                      onChange={(e) =>
-                        setNumEqualityValue(e.target.value.trim())
-                      }
-                      defaultValue={numEqualityValue}
-                    >
-                      {numEquality.map((obj) => (
-                        <option value={obj.value} key={obj.name}>
-                          {obj.name}
-                        </option>
-                      ))}
-                    </Form.Select>
+                        </style>
+                      </InputGroup.Text>
+                      <InputGroup.Text>
+                        <i
+                          className="fa fa-refresh c-pointer"
+                          onClick={() => querySetter()}
+                        >
+                          {" "}
+                          Refresh
+                        </i>
+                      </InputGroup.Text>
+                    </InputGroup>
                   </Col>
-                ) : null}
-              </Row>
-            </Col>
+                  {isSelectedANumber() ? (
+                    <Col sm="4" md="4" lg="4" className="p-1">
+                      <Form.Select
+                        onChange={(e) =>
+                          setNumEqualityValue(e.target.value.trim())
+                        }
+                        defaultValue={numEqualityValue}
+                      >
+                        {numEquality.map((obj) => (
+                          <option value={obj.value} key={obj.name}>
+                            {obj.name}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Col>
+                  ) : null}
+                </Row>
+              </Col>
 
-            <Col sm="12" md="6" lg="6" className="p-1">
-              <div className="form-group d-flex">
-                {fields && fields[searchKey]?.type == Boolean ? (
-                  <Form.Select
-                    onChange={(e) => setSearchValue(e.target.value.trim())}
-                  >
-                    <option key={"false"} value={"false"}>
-                      False
-                    </option>
-                    <option key={"true"} value={"true"}>
-                      True
-                    </option>
-                  </Form.Select>
-                ) : (
-                  <Form.Control
-                    value={searchValue}
-                    required={true}
-                    type={
-                      fields && fields[searchKey]?.type == Number
-                        ? "number"
-                        : fields && fields[searchKey]?.type == Date
+              <Col sm="12" md="6" lg="6" className="p-1">
+                <div className="form-group d-flex">
+                  {fields && fields[searchKey]?.type == Boolean ? (
+                    <Form.Select
+                      onChange={(e) => setSearchValue(e.target.value.trim())}
+                    >
+                      <option key={"false"} value={"false"}>
+                        False
+                      </option>
+                      <option key={"true"} value={"true"}>
+                        True
+                      </option>
+                    </Form.Select>
+                  ) : (
+                    <Form.Control
+                      value={searchValue}
+                      required={true}
+                      type={
+                        fields && fields[searchKey]?.type == Number
+                          ? "number"
+                          : fields && fields[searchKey]?.type == Date
                           ? "date"
                           : "text"
-                    }
-                    onChange={(e) =>
-                      setSearchValue(
-                        e.target.value.trim() == "" ? "" : e.target.value
-                      )
-                    }
-                  />
-                )}
-                <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={loading}
-                  style={{ marginLeft: "-10px", borderRadius: "0 5px 5px 0" }}
-                >
-                  <i className="fas fa-search"></i>
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        </Form>
+                      }
+                      onChange={(e) =>
+                        setSearchValue(
+                          e.target.value.trim() == "" ? "" : e.target.value
+                        )
+                      }
+                    />
+                  )}
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={loading}
+                    style={{ marginLeft: "-10px", borderRadius: "0 5px 5px 0" }}
+                  >
+                    <i className="fas fa-search"></i>
+                  </Button>
+                  <Col style={{ margin: "0 5px" }}>{props.createButton}</Col>
+                </div>
+              </Col>
+            </Row>
+          </Form>
+        </>
       )}
 
       <Row>
@@ -583,8 +589,8 @@ function PaginatedTable(props) {
                   props?.className?.tableClass
                     ? props?.className?.tableClass
                     : typeof props?.className === "string"
-                      ? props?.className
-                      : ""
+                    ? props?.className
+                    : ""
                 }`}
               >
                 <thead
@@ -608,7 +614,11 @@ function PaginatedTable(props) {
                                   : sortingOrder[0].value
                               ))
                         }
-                        className={` c-pointer ${fieldKeys[i] !== sortKey && !field.virtual ? "utilityLink" : ""}`}
+                        className={` c-pointer ${
+                          fieldKeys[i] !== sortKey && !field.virtual
+                            ? "utilityLink"
+                            : ""
+                        }`}
                         style={
                           fieldKeys[i] !== sortKey
                             ? {
@@ -641,8 +651,8 @@ function PaginatedTable(props) {
                                       ? "sort-numeric-up"
                                       : "sort-alpha-up"
                                     : fields[sortKey].type == Number
-                                      ? "sort-numeric-down"
-                                      : "sort-alpha-down"
+                                    ? "sort-numeric-down"
+                                    : "sort-alpha-down"
                                 } text-red`}
                               ></i>
                             </span>

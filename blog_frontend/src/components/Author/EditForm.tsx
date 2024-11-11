@@ -93,7 +93,10 @@ function EditForm({ data }: { data: IArticle | null }) {
       seturlChanged(true);
     }
     return () => {
-      if (coverImageUrl?.startsWith("data://")) {
+      if (
+        coverImageUrl?.startsWith("data://") ||
+        coverImageUrl?.startsWith("blob://")
+      ) {
         URL.revokeObjectURL(coverImageUrl);
       }
     };
@@ -332,7 +335,7 @@ function EditForm({ data }: { data: IArticle | null }) {
               </Col>
               <Col xs="12" className="p-1 pt-2">
                 <InputGroup className="fw-bold">Tags</InputGroup>
-                <ButtonGroup size="sm">
+                <InputGroup size="sm" style={{}}>
                   {loadingSeletionTags ? (
                     <Spinner />
                   ) : (
@@ -364,7 +367,7 @@ function EditForm({ data }: { data: IArticle | null }) {
                   >
                     Add tag
                   </Button>
-                </ButtonGroup>
+                </InputGroup>
               </Col>
             </Row>
           </Col>

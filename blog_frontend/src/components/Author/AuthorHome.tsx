@@ -62,16 +62,19 @@ function AuthorHome() {
     );
   };
 
-  const createArticleButton = () => {
+  const createArticleButton = (
+    name = "Add",
+    style = { padding: "5px", fontSize: "11px" }
+  ) => {
     return (
       <Button
-        style={{ padding: "5px", fontSize: "11px" }}
+        style={style}
         onClick={() => {
           setEditFormData(null);
           setOpenEditingForm(true);
         }}
       >
-        Add
+        {name}
       </Button>
     );
   };
@@ -249,6 +252,7 @@ function AuthorHome() {
         fields={fieldRef.current}
         primaryKey="title"
         query={query}
+        createButton={createArticleButton("Create Article")}
         /* setData={data => setData(data)} */ forCurrentUser={false}
         reload={reload}
       />
