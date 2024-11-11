@@ -46,7 +46,7 @@ function App() {
 
   useEffect(() => {
     if (!api || api.length < 1) {
-      fetch(`${location.protocol}//${location.hostname}:2024/cdn/APIDoc.json`)
+      fetch(`/cdn/APIDoc.json`)
         .then((res) => res.json())
         .then((data) => setApi(data));
       return;
@@ -80,7 +80,7 @@ function App() {
     () => {
       setRefresh(false);
 
-      const handleKeyPress = (event) => {
+      const handleKeyPress = (event: any) => {
         if (event.key === "F5") {
           event.preventDefault(); // Prevent the default F5 behavior
           setRefresh(true);
