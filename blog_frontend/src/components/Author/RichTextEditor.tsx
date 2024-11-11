@@ -1,5 +1,5 @@
 import { Button, Container, Spinner } from "react-bootstrap";
-import Reblend, { useEffect, useState } from "reblendjs";
+import Reblend, { useEffect, useRef, useState } from "reblendjs";
 import TextArea from "./TextArea";
 
 function RichTextEditor({
@@ -13,6 +13,8 @@ function RichTextEditor({
   const [loadingError, setLoadingError] = useState("");
   const [trigger, setTrigger] = useState(false);
   const textArea = new TextArea();
+  const editorContainerRef = useRef<HTMLDivElement | undefined>(undefined);
+  const [reloading, setReloading] = useState(false);
 
   let round = 0;
   let intervalId: any;
@@ -51,10 +53,24 @@ function RichTextEditor({
     }, 500);
   };
 
-  intervalStarter();
+  //intervalStarter();
 
   useEffect(() => {
     clearInterval(intervalId);
+    try {
+      if (
+        (window as any).$ &&
+        $("#summernote") &&
+        ($("#summernote") as any).summernote
+      ) {
+        ($("#summernote") as any).summernote("destroy");
+      }
+    } catch (error) {}
+    setReloading(false);
+    if (editorContainerRef.current) {
+      editorContainerRef.current.innerHTML = "";
+      editorContainerRef.current.appendChild(textArea);
+    }
     intervalStarter();
     return () => {
       if ($ && $("#summernote") && ($("#summernote") as any).summernote) {
@@ -64,7 +80,7 @@ function RichTextEditor({
     };
   }, [trigger]);
 
-  return (
+  return reloading ? null : (
     <>
       <script
         type="text/javascript"
@@ -83,7 +99,8 @@ function RichTextEditor({
         rel="stylesheet"
       />
       <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.min.js"></script>
-      {textArea}
+      <div ref={editorContainerRef}>{textArea}</div>
+
       {loading ? (
         <div>
           Initiating editor please wait...{" "}
@@ -94,7 +111,12 @@ function RichTextEditor({
       ) : loadingError ? (
         <div>
           {loadingError} {"  "}
-          <Button onClick={() => setTrigger((prev) => !prev)}>
+          <Button
+            onClick={() => {
+              setReloading(true);
+              setTimeout(() => setTrigger((prev) => !prev));
+            }}
+          >
             Reload editor
           </Button>
         </div>

@@ -21,4 +21,5 @@ export default interface IArticle {
   createdAt: {
     dateString: string;
   };
+  status: number;
 }

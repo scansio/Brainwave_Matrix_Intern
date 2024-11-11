@@ -141,7 +141,8 @@ function EditorsPick() {
                       <img
                         sizes="100px"
                         src={
-                          articles[currentArticlePosition].author.avatar ||
+                          BASE +
+                            articles[currentArticlePosition].author.avatar ||
                           "/static/media/face.jpeg"
                         }
                         class="absolute inset-0 w-full h-full object-cover object-cover absolute inset-0 w-full h-full"
@@ -336,7 +337,9 @@ function EditorsPick() {
                 >
                   <div class="aspect-w-16 aspect-h-12 sm:aspect-h-9 md:aspect-h-14 lg:aspect-h-10 2xl:aspect-h-9 relative">
                     <img
-                      src={BASE + articles[currentArticlePosition].coverImageUrl}
+                      src={
+                        BASE + articles[currentArticlePosition].coverImageUrl
+                      }
                       alt={articles[currentArticlePosition].title}
                       sizes="(max-width: 768px) 100vw, 50vw"
                       class="absolute inset-0 object-cover rounded-3xl object-cover absolute inset-0 w-full h-full"

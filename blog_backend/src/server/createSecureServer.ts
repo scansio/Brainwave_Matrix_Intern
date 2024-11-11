@@ -78,7 +78,7 @@ export default function createSecureServer({
       const temp = {
         path: `/${config.scheme}`,
         handler: createProxyMiddleware({
-          target: `${protocol}://localhost:${config.port}`, // The target server (CDN server)
+          target: `${protocol}://${ip}:${config.port}`, // The target server (CDN server)
           changeOrigin: true, // Changes the origin of the host header to the target URL
           pathRewrite: { [`^/${scheme}/${config.scheme}`]: '' }, // Rewrites the path to remove '/main/cdn'
           logger: Logger, // Logs for debugging; remove or set to 'error' in production

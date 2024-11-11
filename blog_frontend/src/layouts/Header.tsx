@@ -122,7 +122,7 @@ function Header() {
                   </div>
                 </li>
                 <div style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px; display: none;"></div>
-                {(tags && (tags.length = 2), tags)?.map((tag) => (
+                {(tags && (tags.length = 2), tags)?.map((tag: any) => (
                   <li
                     class="menu-item menu-dropdown relative"
                     data-headlessui-state=""
@@ -135,9 +135,9 @@ function Header() {
                     >
                       <Link
                         className="inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                        href={"/tag/" + tag}
+                        href={"/tag/" + tag?.name}
                       >
-                        {tag}
+                        {tag?.name}
                         {/* <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -343,7 +343,7 @@ function Header() {
               </div> */}
               {auth ? (
                 <div class="AvatarDropdown ">
-                  <div class="relative" data-headlessui-state="">
+                  <div class="relative flex" data-headlessui-state="">
                     <Link
                       className="w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center"
                       aria-expanded="false"
@@ -365,6 +365,34 @@ function Header() {
                         ></path>
                         <path
                           d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></path>
+                      </svg>
+                    </Link>
+                    <Link
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center"
+                      aria-expanded="false"
+                      data-headlessui-state=""
+                      href="/logout"
+                    >
+                      <svg
+                        class="w-6 h-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15 12L19 16M19 16L15 20M19 16H9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></path>
+                        <path
+                          d="M10 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H10"
                           stroke="currentColor"
                           stroke-width="1.5"
                           stroke-linecap="round"

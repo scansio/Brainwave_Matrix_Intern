@@ -1,5 +1,5 @@
 scheduling
-main
+RewriteRule ^main(.*)$ http://127.0.0.1:3003/main/$1 [P]
 hook
 cdn
 socket

@@ -61,6 +61,15 @@ function EditForm({ data }: { data: IArticle | null }) {
   const [published, setpublished] = useState(true);
 
   const [status, setStatus] = useState(0);
+  const {
+    _id,
+    firstname,
+    lastname,
+    slug: authorSlug,
+    avatar,
+    bio,
+  } = SharedConfig.getLocalData("user") || {};
+  const author = { _id, firstname, lastname, slug: authorSlug, avatar, bio };
 
   useEffect(() => {
     if (data) {
@@ -72,6 +81,7 @@ function EditForm({ data }: { data: IArticle | null }) {
       setseoDescription(data.seoDescription);
       settags(data.tags);
       setpublished(data.published);
+      setStatus(data.status);
       setIsUpdate(true);
     }
   }, []);
@@ -246,12 +256,13 @@ function EditForm({ data }: { data: IArticle | null }) {
       tags,
       likeByIds: [],
       numComments: 0,
-      author: SharedConfig.getLocalData("user"),
+      author,
       createdAt: {
         dateString: new Date().toLocaleDateString(),
       },
       published,
       content,
+      status,
     };
 
     setPreviewOfArticle(previewOfArticleTemp);
@@ -429,7 +440,7 @@ function EditForm({ data }: { data: IArticle | null }) {
           Preview of "{title}"
         </ModalHeader>
         <ModalBody>
-          <Article previewOfArticle={previewOfArticle} />
+          {previewing ? <Article previewOfArticle={previewOfArticle} /> : null}
         </ModalBody>
       </Modal>
     </>

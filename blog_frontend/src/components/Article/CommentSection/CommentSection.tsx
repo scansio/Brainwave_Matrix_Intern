@@ -9,6 +9,7 @@ import fetcher from "../../../scripts/SharedFetcher";
 import { paginatingUrl } from "../../../scripts/misc";
 import {
   ALL_COMMENT,
+  BASE,
   CREATE_COMMENT,
   LIKE_ARTICLE,
   LIKE_COMMENT,
@@ -221,7 +222,7 @@ function CommentSection({
                         <img
                           sizes="100px"
                           src={
-                            comment.uid?.avatar ||
+                            BASE + comment.uid?.avatar ||
                             "/static/media/8.ce5f252ae5871de13c94.jpg"
                           }
                           class="absolute inset-0 w-full h-full object-cover object-cover absolute inset-0 w-full h-full"

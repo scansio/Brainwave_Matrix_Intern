@@ -1,32 +1,9 @@
-import Reblend, {
-  useState,
-  useEffect,
-  useRef,
-  SharedConfig,
-  IAny,
-} from "reblendjs";
-import {
-  Button,
-  ButtonGroup,
-  Col,
-  Form,
-  Image,
-  InputGroup,
-  Row,
-  Spinner,
-} from "react-bootstrap";
-import { redirectTo, useParams } from "reblend-router";
+import Reblend, { useState, useEffect, SharedConfig, IAny } from "reblendjs";
+import { Col, Form, Image, InputGroup, Row, Spinner } from "react-bootstrap";
+import { redirectTo } from "reblend-router";
 import fetcher from "../../scripts/SharedFetcher";
 import { toast } from "react-toastify";
-import {
-  ALL_TAG,
-  BASE,
-  CREATE_ARTICLE,
-} from "../../scripts/config/RestEndpoints";
-import { paginatingUrl } from "../../scripts/misc";
-import { ACTIVE } from "../../scripts/config/contants";
-import CreateTag from "./CreateTag";
-import RichTextEditor from "./RichTextEditor";
+import { BASE, USER_BASE } from "../../scripts/config/RestEndpoints";
 import { authTokenContext } from "../../context";
 
 function Profile() {
@@ -37,6 +14,7 @@ function Profile() {
     lastname: string;
     bio: string;
     phone: string;
+    avatar: string;
     _id: string;
   } | null =
     SharedConfig.getLocalData("user") ||
@@ -52,7 +30,7 @@ function Profile() {
   const [phone, setphone] = useState(profileData?.phone);
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [profileImageUrl, setProfileImageUrl] = useState(profileData?.avatar);
   const [urlChanged, seturlChanged] = useState(false);
 
   useEffect(() => {
@@ -69,7 +47,7 @@ function Profile() {
     // eslint-disable-next-line reblend-hooks/exhaustive-deps
   }, [profileImage]);
 
-  async function updateArticle(e: any) {
+  async function updateProfile(e: any) {
     e.preventDefault();
     if (!bio || bio?.length > 500) {
       toast.error("Your bio should be less than 500 characters");
@@ -87,7 +65,6 @@ function Profile() {
       fetchOptiondata.append("lastname", lastname);
       fetchOptiondata.append("bio", bio);
       fetchOptiondata.append("phone", phone);
-      fetchOptiondata.append("id", profileData?._id);
     } else {
       fetchOptiondata = {
         slug,
@@ -96,12 +73,11 @@ function Profile() {
         lastname,
         bio,
         phone,
-        id: profileData?._id,
       };
     }
 
     const gdFetchOption = {
-      url: CREATE_ARTICLE,
+      url: USER_BASE,
       method: "PATCH",
       data: fetchOptiondata,
     };
@@ -119,6 +95,8 @@ function Profile() {
       if (!data.data.status) {
         toast.error(data.data.message);
       } else {
+        const userInfo = { ...profileData, ...(data.data.userInfo || {}) };
+        SharedConfig.setLocalData("user", userInfo);
         toast.success(data.data.message);
       }
     }
@@ -127,16 +105,10 @@ function Profile() {
 
   return (
     <>
-      <Form onSubmit={(e) => updateArticle(e)}>
+      <Form onSubmit={(e) => updateProfile(e)}>
         <Row>
           <Col xs={12} md={5} lg={5}>
             <Row>
-              <Col xs="12" className="p-1 pt-2">
-                <InputGroup>
-                  <InputGroup.Text className="fw-bold">Email</InputGroup.Text>
-                  <Form.Control readOnly type="text" value={email} />
-                </InputGroup>
-              </Col>
               <Col xs="12" className="p-1 pt-2">
                 <InputGroup className="fw-bold">Profile image</InputGroup>
 
@@ -176,8 +148,14 @@ function Profile() {
               </Col>
             </Row>
           </Col>
-          <Col xs={12} md={5} lg={5}>
+          <Col xs={12} md={7} lg={7}>
             <Row>
+              <Col xs="12" className="p-1 pt-2">
+                <InputGroup>
+                  <InputGroup.Text className="fw-bold">Email</InputGroup.Text>
+                  <Form.Control readOnly type="text" value={email} />
+                </InputGroup>
+              </Col>
               <Col xs="12" className="p-1 pt-2">
                 <InputGroup className="fw-bold">Slug</InputGroup>
                 <Form.Control
@@ -200,19 +178,21 @@ function Profile() {
                 <InputGroup className="fw-bold">Phone</InputGroup>
                 <Form.Control
                   required={true}
-                  type="text"
+                  type="tel"
                   value={phone}
                   onChange={(e) => setphone(e.target.value)}
                 />
               </Col>
               <Col xs="12" className="p-1 pt-2">
                 <InputGroup className="fw-bold">Bio</InputGroup>
-                <textarea
-                  className="form-control"
-                  required={true}
-                  value={bio}
-                  onChange={(e) => setbio(e.target.value)}
-                />
+                <InputGroup className="fw-bold">
+                  <textarea
+                    className="form-control"
+                    required={true}
+                    value={bio}
+                    onChange={(e) => setbio(e.target.value)}
+                  />
+                </InputGroup>
               </Col>
             </Row>
           </Col>

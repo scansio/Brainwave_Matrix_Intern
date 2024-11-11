@@ -18,7 +18,7 @@ class ErrorHandler extends Reblend<
 
   html() {
     return this.state.errorMessage ? (
-      <PageLayout>
+      <>
         <style>
           {`
 * {
@@ -34,14 +34,13 @@ class ErrorHandler extends Reblend<
 }
 header {
   width: 100%;
-  height: 50vh;
   background: var(--bgcolor-dark);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .main-container {
-  height: 100%;
+  height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
@@ -122,7 +121,7 @@ header {
             </div>
           </div>
         </header>
-      </PageLayout>
+      </>
     ) : (
       this.props.children
     );

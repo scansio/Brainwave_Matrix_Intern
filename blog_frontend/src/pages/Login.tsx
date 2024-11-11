@@ -27,10 +27,10 @@ function Login() {
           SharedConfig.setLocalData(UID, data.connection.uid);
           setAuthToken(data.data.token);
           fetcher
-            .fetch(USER_DETAIL)
-            .then((data) => {
-              if (data?.data?.status) {
-                SharedConfig.setLocalData("user", data.data.user);
+            .fetch(USER_DETAIL + data.connection.uid)
+            .then((data1) => {
+              if (data1?.data?.status) {
+                SharedConfig.setLocalData("user", data1.data.user);
               }
             })
             .catch(() => {});

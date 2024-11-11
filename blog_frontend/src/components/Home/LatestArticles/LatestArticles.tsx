@@ -95,7 +95,7 @@ function LatestArticles() {
                               <img
                                 sizes="100px"
                                 src={
-                                  article.author?.avatar ||
+                                  BASE + article.author?.avatar ||
                                   "/static/media/face2.jpeg"
                                 }
                                 class="absolute inset-0 w-full h-full object-cover object-cover absolute inset-0 w-full h-full"
@@ -494,7 +494,8 @@ function LatestArticles() {
                         <img
                           sizes="100px"
                           src={
-                            article.author.avatar || "/static/media/face1.jpeg"
+                            BASE + article.author.avatar ||
+                            "/static/media/face1.jpeg"
                           }
                           class="absolute inset-0 w-full h-full object-cover object-cover absolute inset-0 w-full h-full"
                           alt={

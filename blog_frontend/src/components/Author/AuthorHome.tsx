@@ -14,7 +14,7 @@ import {
 } from "../../scripts/config/RestEndpoints";
 import fetcher from "../../scripts/SharedFetcher";
 import { toast } from "react-toastify";
-import { HOTLIST } from "../../scripts/config/contants";
+import { ACTIVE, HOTLIST, INACTIVE } from "../../scripts/config/contants";
 import PaginatedTable from "../paginating/PaginatedTable";
 import { Link, redirectTo } from "reblend-router";
 import EditForm from "./EditForm";
@@ -43,6 +43,7 @@ function AuthorHome() {
           disabled={deletingArticle}
         >
           <i class="fa fa-trash" aria-hidden="true">
+            {" "}
             Delete
           </i>
         </Button>
@@ -55,7 +56,7 @@ function AuthorHome() {
             setOpenEditingForm(true);
           }}
         >
-          <i className="fas fa-edit">Edit</i>
+          <i className="fas fa-edit"> Edit</i>
         </Button>
       </ButtonGroup>
     );
@@ -87,7 +88,15 @@ function AuthorHome() {
       virtual: true,
     },
     _id: { name: "Id", type: String },
-    title: { name: "Title", type: String },
+    title: {
+      name: "Title",
+      type: String,
+      transform: {
+        out: (rowData: any) => (
+          <Link href={"/article/" + rowData?.slug}>{rowData?.title}</Link>
+        ),
+      },
+    },
     slug: { name: "Slug", type: String },
     content: {
       name: "Content",
@@ -150,11 +159,16 @@ function AuthorHome() {
     },
   });
 
+  const query = {
+    $in: { status: [INACTIVE, ACTIVE] },
+  };
+
   async function deleteArticle(e: any) {
     e.preventDefault();
     setDeletingArticle(true);
     const gdFetchArticle = {
       url: CREATE_ARTICLE,
+      method: "PATCH",
       data: {
         id: itemId,
         status: HOTLIST,
@@ -168,6 +182,7 @@ function AuthorHome() {
         } else {
           toast.success(data.data.message);
           setReload((prev) => !prev);
+          setShowConfirmDeletion(false);
         }
         setDeletingArticle(false);
       })
@@ -206,18 +221,34 @@ function AuthorHome() {
         animation
       >
         <ModalBody>
-          <span>Are Sure you want to delete this article</span>
+          <span>Are sure you want to delete this article</span>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={(e) => deleteArticle(e)}></Button>
+          <Button onClick={(e) => deleteArticle(e)} variant="danger">
+            Confirm
+          </Button>
         </ModalFooter>
       </Modal>
 
       <PaginatedTable
         url={urlRef.current}
+        style={{
+          tdStyle: {
+            minWidth: "100px",
+            maxHeight: "300px",
+            overflow: "hidden",
+            textAlign: "center",
+          },
+          thStyle: {
+            minWidth: "100px",
+            maxHeight: "300px",
+            overflow: "hidden",
+          },
+        }}
         dataName="Articles"
         fields={fieldRef.current}
         primaryKey="title"
+        query={query}
         /* setData={data => setData(data)} */ forCurrentUser={false}
         reload={reload}
       />

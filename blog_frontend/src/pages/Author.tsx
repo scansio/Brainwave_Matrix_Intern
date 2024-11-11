@@ -25,6 +25,10 @@ function Author() {
   return (
     <PageLayout>
       <link rel="stylesheet" href="/static/css/main.css" />
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      />
       <div class="py-5 my-2 mx-5">
         <Router>
           {Object.entries(page).map(([path, Component]) => (
