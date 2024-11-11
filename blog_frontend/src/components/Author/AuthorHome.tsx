@@ -236,15 +236,11 @@ function AuthorHome() {
       <PaginatedTable
         url={urlRef.current}
         style={{
-          tdStyle: {
-            minWidth: "100px",
-            maxHeight: "300px",
-            overflow: "hidden",
-            textAlign: "center",
-          },
+          tdStyle:
+            "min-width: 100px; max-height: 100px !important; overflow: hidden; text-align: center;",
           thStyle: {
             minWidth: "100px",
-            maxHeight: "300px",
+            maxHeight: "100px !important",
             overflow: "hidden",
           },
         }}

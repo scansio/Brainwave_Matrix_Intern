@@ -1,21 +1,19 @@
 /* eslint-disable require-jsdoc */
 import Reblend from "reblendjs";
 
-function TRow(
-  {
-    ref,
-    result,
-    resultIndex,
-    style,
-    className,
-    options,
-    numbered = true,
-    fieldKeys,
-    fields,
-    computeValue,
-    ...props
-  }
-) {
+function TRow({
+  ref,
+  result,
+  resultIndex,
+  style,
+  className,
+  options,
+  numbered = true,
+  fieldKeys,
+  fields,
+  computeValue,
+  ...props
+}) {
   return (
     <tr
       {...props}
@@ -35,12 +33,15 @@ function TRow(
       ) : null}
       {fieldKeys?.map((field) => (
         // Cell
-        <td
-          key={field}
-          style={style?.tdStyle}
-          className={`${className?.tdClass || ""} ${!fields[field]?.virtual ? "overflow-mw200" : ""}`}
-        >
-          {computeValue(result[field], field, resultIndex)}
+        <td key={field}>
+          <div
+            style={style?.tdStyle}
+            className={`${className?.tdClass || ""} ${
+              !fields[field]?.virtual ? "overflow-mw200" : ""
+            }`}
+          >
+            {computeValue(result[field], field, resultIndex)}
+          </div>
         </td>
       ))}
     </tr>

@@ -154,7 +154,7 @@ function EditForm({ data }: { data: IArticle | null }) {
       fetchOptiondata.append("content", content);
       fetchOptiondata.append("title", title);
       fetchOptiondata.append("seoDescription", seoDescription);
-      fetchOptiondata.append("tags", tags);
+      tags?.forEach((tag) => fetchOptiondata.append("tags", tag));
       fetchOptiondata.append("published", published);
     } else {
       fetchOptiondata = {
@@ -207,7 +207,7 @@ function EditForm({ data }: { data: IArticle | null }) {
       fetchOptiondata.append("content", content);
       fetchOptiondata.append("title", title);
       fetchOptiondata.append("seoDescription", seoDescription);
-      fetchOptiondata.append("tags", tags);
+      tags?.forEach((tag) => fetchOptiondata.append("tags", tag));
       fetchOptiondata.append("published", published);
       fetchOptiondata.append("id", dataIdRef.current);
     } else {
