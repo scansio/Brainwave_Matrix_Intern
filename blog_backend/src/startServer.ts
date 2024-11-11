@@ -35,7 +35,7 @@ import IServerConfig from './types/IServerConfig'
     })
 
     // Allow the parent to exit while the child continues running
-    //child.unref();
+    child.unref();
   }
 
   const found = serverName && servers.find((serverConfig) => serverName === serverConfig.name)

@@ -2,6 +2,7 @@
   "name": "blog_frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://api.blog.spacesgrowth.com/cdn/frontend",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/user-event": "^13.5.0",

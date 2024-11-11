@@ -2,6 +2,7 @@
   "name": "blog-admin-portal",
   "version": "0.1.0",
   "publisher": "Emmanuel Paul Elom <scansioquielom@gmail.com>",
+  "homepage": "https://api.blog.spacesgrowth.com/cdn/admin",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@popperjs/core": "^2.11.8",
